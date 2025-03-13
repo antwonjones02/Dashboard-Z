@@ -1,0 +1,255 @@
+[
+  {
+    "id": "proj-001",
+    "title": "Website Redesign",
+    "description": "Complete overhaul of the company website with modern design and improved UX",
+    "progress": 75,
+    "status": "on-track",
+    "dueDate": "2025-04-15",
+    "startDate": "2025-01-10",
+    "budget": {
+      "allocated": 50000,
+      "spent": 32500,
+      "remaining": 17500
+    },
+    "team": [
+      {
+        "id": "user-001",
+        "name": "John Doe",
+        "role": "Project Manager",
+        "avatar": "/avatars/john.jpg"
+      },
+      {
+        "id": "user-002",
+        "name": "Jane Smith",
+        "role": "Lead Designer",
+        "avatar": "/avatars/jane.jpg"
+      },
+      {
+        "id": "user-003",
+        "name": "Robert Johnson",
+        "role": "Frontend Developer",
+        "avatar": "/avatars/robert.jpg"
+      }
+    ],
+    "milestones": [
+      {
+        "id": "ms-001",
+        "title": "Design Approval",
+        "dueDate": "2025-02-15",
+        "completed": true
+      },
+      {
+        "id": "ms-002",
+        "title": "Frontend Development",
+        "dueDate": "2025-03-30",
+        "completed": false
+      },
+      {
+        "id": "ms-003",
+        "title": "Content Migration",
+        "dueDate": "2025-04-10",
+        "completed": false
+      }
+    ],
+    "risks": [
+      {
+        "id": "risk-001",
+        "description": "Content delivery delay from marketing team",
+        "severity": "medium",
+        "mitigation": "Weekly check-ins with marketing team lead"
+      }
+    ]
+  },
+  {
+    "id": "proj-002",
+    "title": "Mobile App Development",
+    "description": "Create a native mobile application for iOS and Android platforms",
+    "progress": 45,
+    "status": "at-risk",
+    "dueDate": "2025-05-01",
+    "startDate": "2025-01-15",
+    "budget": {
+      "allocated": 75000,
+      "spent": 42000,
+      "remaining": 33000
+    },
+    "team": [
+      {
+        "id": "user-001",
+        "name": "John Doe",
+        "role": "Project Manager",
+        "avatar": "/avatars/john.jpg"
+      },
+      {
+        "id": "user-004",
+        "name": "Emily Davis",
+        "role": "Mobile Developer",
+        "avatar": "/avatars/emily.jpg"
+      },
+      {
+        "id": "user-005",
+        "name": "Michael Brown",
+        "role": "UX Designer",
+        "avatar": "/avatars/michael.jpg"
+      }
+    ],
+    "milestones": [
+      {
+        "id": "ms-004",
+        "title": "UX Design Completion",
+        "dueDate": "2025-02-28",
+        "completed": true
+      },
+      {
+        "id": "ms-005",
+        "title": "iOS Version Beta",
+        "dueDate": "2025-04-01",
+        "completed": false
+      },
+      {
+        "id": "ms-006",
+        "title": "Android Version Beta",
+        "dueDate": "2025-04-15",
+        "completed": false
+      }
+    ],
+    "risks": [
+      {
+        "id": "risk-002",
+        "description": "API integration challenges with legacy systems",
+        "severity": "high",
+        "mitigation": "Dedicated backend developer assigned to create middleware"
+      },
+      {
+        "id": "risk-003",
+        "description": "App store approval delays",
+        "severity": "medium",
+        "mitigation": "Early submission of test builds to identify potential issues"
+      }
+    ]
+  },
+  {
+    "id": "proj-003",
+    "title": "Content Strategy",
+    "description": "Develop comprehensive content strategy for all digital channels",
+    "progress": 90,
+    "status": "on-track",
+    "dueDate": "2025-03-30",
+    "startDate": "2025-02-01",
+    "budget": {
+      "allocated": 25000,
+      "spent": 22000,
+      "remaining": 3000
+    },
+    "team": [
+      {
+        "id": "user-006",
+        "name": "Sarah Williams",
+        "role": "Content Strategist",
+        "avatar": "/avatars/sarah.jpg"
+      },
+      {
+        "id": "user-007",
+        "name": "David Wilson",
+        "role": "SEO Specialist",
+        "avatar": "/avatars/david.jpg"
+      }
+    ],
+    "milestones": [
+      {
+        "id": "ms-007",
+        "title": "Audience Research",
+        "dueDate": "2025-02-15",
+        "completed": true
+      },
+      {
+        "id": "ms-008",
+        "title": "Channel Strategy",
+        "dueDate": "2025-03-01",
+        "completed": true
+      },
+      {
+        "id": "ms-009",
+        "title": "Content Calendar",
+        "dueDate": "2025-03-25",
+        "completed": false
+      }
+    ],
+    "risks": []
+  },
+  {
+    "id": "proj-004",
+    "title": "Marketing Campaign",
+    "description": "Q2 integrated marketing campaign across digital and traditional channels",
+    "progress": 20,
+    "status": "delayed",
+    "dueDate": "2025-06-10",
+    "startDate": "2025-03-01",
+    "budget": {
+      "allocated": 100000,
+      "spent": 15000,
+      "remaining": 85000
+    },
+    "team": [
+      {
+        "id": "user-006",
+        "name": "Sarah Williams",
+        "role": "Marketing Director",
+        "avatar": "/avatars/sarah.jpg"
+      },
+      {
+        "id": "user-008",
+        "name": "Thomas Clark",
+        "role": "Creative Director",
+        "avatar": "/avatars/thomas.jpg"
+      },
+      {
+        "id": "user-009",
+        "name": "Lisa Rodriguez",
+        "role": "Media Buyer",
+        "avatar": "/avatars/lisa.jpg"
+      }
+    ],
+    "milestones": [
+      {
+        "id": "ms-010",
+        "title": "Campaign Strategy",
+        "dueDate": "2025-03-15",
+        "completed": true
+      },
+      {
+        "id": "ms-011",
+        "title": "Creative Development",
+        "dueDate": "2025-04-15",
+        "completed": false
+      },
+      {
+        "id": "ms-012",
+        "title": "Media Planning",
+        "dueDate": "2025-05-01",
+        "completed": false
+      },
+      {
+        "id": "ms-013",
+        "title": "Campaign Launch",
+        "dueDate": "2025-06-01",
+        "completed": false
+      }
+    ],
+    "risks": [
+      {
+        "id": "risk-004",
+        "description": "Budget approval delay for media buys",
+        "severity": "high",
+        "mitigation": "Escalation to executive team for priority review"
+      },
+      {
+        "id": "risk-005",
+        "description": "Creative resource availability",
+        "severity": "medium",
+        "mitigation": "Contract with external agency as backup"
+      }
+    ]
+  }
+]
