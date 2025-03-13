@@ -81,7 +81,7 @@ const CSVActions: React.FC<CSVActionsProps> = ({
         <button
           type="button"
           onClick={handleDownloadTemplate}
-          className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+          className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-[#003366] hover:bg-[#041C2C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7D9BC1]"
         >
           <ArrowDownTrayIcon className="h-4 w-4 mr-2" />
           Download Template
@@ -91,7 +91,7 @@ const CSVActions: React.FC<CSVActionsProps> = ({
           type="button"
           onClick={handleImportClick}
           disabled={isImporting}
-          className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+          className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-[#003366] hover:bg-[#041C2C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7D9BC1] disabled:opacity-50"
         >
           <ArrowUpTrayIcon className="h-4 w-4 mr-2" />
           {isImporting ? 'Importing...' : 'Import CSV'}
@@ -107,7 +107,7 @@ const CSVActions: React.FC<CSVActionsProps> = ({
       </div>
       
       {importError && (
-        <div className="text-sm text-red-600 bg-red-50 p-2 rounded-md">
+        <div className="text-sm text-[#C01933] bg-red-50 p-2 rounded-md">
           <p className="font-medium">Import Error:</p>
           <pre className="whitespace-pre-wrap text-xs mt-1">{importError}</pre>
         </div>
