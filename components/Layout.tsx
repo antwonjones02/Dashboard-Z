@@ -1,25 +1,25 @@
-import React, { ReactNode, useState } from 'react';
-import Sidebar from './Sidebar';
+import React, { useState } from 'react';
 import Navbar from './Navbar';
+import Sidebar from './Sidebar';
 
 interface LayoutProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-neutral-50 dark:bg-neutral-900">
-      {/* Sidebar - Hidden on mobile, visible on desktop */}
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
-
-      {/* Main Content */}
-      <div className="flex flex-col flex-1 md:ml-64 overflow-hidden">
-        <Navbar onMenuButtonClick={() => setSidebarOpen(true)} />
+      
+      <div className="md:pl-64 flex flex-col flex-1">
+        <Navbar setSidebarOpen={setSidebarOpen} />
         
-        <main className="flex-1 overflow-y-auto p-4 md:p-6">
-          {children}
+        <main className="flex-1">
+          <div className="py-6">
+            {children}
+          </div>
         </main>
       </div>
     </div>
