@@ -54,7 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <div className="relative flex-1 flex flex-col max-w-xs w-full bg-white dark:bg-neutral-800">
+            <div className="relative flex-1 flex flex-col max-w-xs w-full bg-white dark:bg-[#041C2C]">
               <Transition.Child
                 as={Fragment}
                 enter="ease-in-out duration-300"
@@ -77,7 +77,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
               </Transition.Child>
               <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                 <div className="flex-shrink-0 flex items-center px-4">
-                  <h1 className="text-xl font-bold text-primary-600">Workflow Nexus</h1>
+                  <h1 className="text-xl font-bold text-[#003366] dark:text-white">Workflow Nexus</h1>
                 </div>
                 <nav className="mt-5 px-2 space-y-1">
                   {navigation.map((item) => (
@@ -86,15 +86,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
                       href={item.href}
                       className={`group flex items-center px-2 py-2 text-base font-medium rounded-md ${
                         router.pathname === item.href
-                          ? 'bg-primary-100 text-primary-900 dark:bg-primary-900 dark:text-primary-100'
-                          : 'text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-700'
+                          ? 'bg-[#7D9BC1] text-[#003366] dark:bg-[#003366] dark:text-white'
+                          : 'text-neutral-600 hover:bg-neutral-100 dark:text-[#7D9BC1] dark:hover:bg-[#002852]'
                       }`}
                     >
                       <item.icon
                         className={`mr-4 h-6 w-6 ${
                           router.pathname === item.href
-                            ? 'text-primary-600 dark:text-primary-400'
-                            : 'text-neutral-400 group-hover:text-neutral-500 dark:text-neutral-400 dark:group-hover:text-neutral-300'
+                            ? 'text-[#003366] dark:text-[#7D9BC1]'
+                            : 'text-neutral-400 group-hover:text-neutral-500 dark:text-[#7D9BC1] dark:group-hover:text-white'
                         }`}
                         aria-hidden="true"
                       />
@@ -111,10 +111,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
 
       {/* Desktop sidebar - fixed position with specific width */}
       <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
-        <div className="flex-1 flex flex-col min-h-0 bg-white dark:bg-neutral-800 border-r border-neutral-200 dark:border-neutral-700">
+        <div className="flex-1 flex flex-col min-h-0 bg-white dark:bg-[#041C2C] border-r border-neutral-200 dark:border-[#002852]">
           <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
             <div className="flex items-center flex-shrink-0 px-4">
-              <h1 className="text-xl font-bold text-primary-600">Workflow Nexus</h1>
+              <h1 className="text-xl font-bold text-[#003366] dark:text-white">Workflow Nexus</h1>
             </div>
             <nav className="mt-5 flex-1 px-2 space-y-1">
               {navigation.map((item) => (
@@ -123,15 +123,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
                   href={item.href}
                   className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
                     router.pathname === item.href
-                      ? 'bg-primary-100 text-primary-900 dark:bg-primary-900 dark:text-primary-100'
-                      : 'text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-700'
+                      ? 'bg-[#7D9BC1] text-[#003366] dark:bg-[#003366] dark:text-white'
+                      : 'text-neutral-600 hover:bg-neutral-100 dark:text-[#7D9BC1] dark:hover:bg-[#002852]'
                   }`}
                 >
                   <item.icon
                     className={`mr-3 h-5 w-5 ${
                       router.pathname === item.href
-                        ? 'text-primary-600 dark:text-primary-400'
-                        : 'text-neutral-400 group-hover:text-neutral-500 dark:text-neutral-400 dark:group-hover:text-neutral-300'
+                        ? 'text-[#003366] dark:text-[#7D9BC1]'
+                        : 'text-neutral-400 group-hover:text-neutral-500 dark:text-[#7D9BC1] dark:group-hover:text-white'
                     }`}
                     aria-hidden="true"
                   />
