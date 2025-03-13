@@ -4,36 +4,9 @@ import { MagnifyingGlassIcon, FunnelIcon, PlusIcon, ChevronDownIcon } from '@her
 import SEO from '../components/SEO';
 import CSVActions from '../components/CSVActions';
 import { csvTemplates } from '../utils/csvUtils';
-
-// Define the Stakeholder type
-interface Stakeholder {
-  id: string;
-  name: string;
-  role: string;
-  company: string;
-  avatar: string;
-  contact: {
-    email: string;
-    phone: string;
-    linkedin?: string;
-    slack?: string;
-  };
-  tags: string[];
-  projects: {
-    id: string;
-    title: string;
-    role: string;
-  }[];
-  influenceLevel: 'high' | 'medium' | 'low';
-  interestLevel: 'high' | 'medium' | 'low';
-  notes: string;
-  lastContact: string;
-  upcomingInteractions: {
-    type: 'meeting' | 'call' | 'email';
-    date: string;
-    description: string;
-  }[];
-}
+import StakeholderCard, { Stakeholder } from '../components/stakeholders/StakeholderCard';
+import StakeholderForm from '../components/stakeholders/StakeholderForm';
+import InteractionForm, { Interaction } from '../components/stakeholders/InteractionForm';
 
 // Mock function to fetch stakeholders
 const fetchStakeholders = async (): Promise<Stakeholder[]> => {
@@ -142,42 +115,136 @@ const fetchStakeholders = async (): Promise<Stakeholder[]> => {
         },
       ],
     },
+    {
+      id: '4',
+      name: 'Emily Rodriguez',
+      role: 'Product Manager',
+      company: 'Innovate Solutions',
+      avatar: 'https://via.placeholder.com/150',
+      contact: {
+        email: 'emily.rodriguez@innovate.com',
+        phone: '+1 (555) 789-0123',
+        slack: '@emilyr',
+      },
+      tags: ['Product', 'Decision Influencer', 'UX Advocate'],
+      projects: [
+        {
+          id: '104',
+          title: 'Mobile App Development',
+          role: 'Product Owner',
+        },
+      ],
+      influenceLevel: 'medium',
+      interestLevel: 'high',
+      notes: 'Detail-oriented and focused on user experience. Prefers visual presentations.',
+      lastContact: '2023-03-05',
+      upcomingInteractions: [
+        {
+          type: 'meeting',
+          date: '2023-03-12',
+          description: 'Product roadmap planning session',
+        },
+      ],
+    },
+    {
+      id: '5',
+      name: 'David Wilson',
+      role: 'CFO',
+      company: 'Global Enterprises',
+      avatar: 'https://via.placeholder.com/150',
+      contact: {
+        email: 'david.wilson@global.com',
+        phone: '+1 (555) 234-5678',
+        linkedin: 'linkedin.com/in/davidwilson',
+      },
+      tags: ['Executive', 'Financial', 'Decision Maker'],
+      projects: [
+        {
+          id: '105',
+          title: 'Financial System Upgrade',
+          role: 'Executive Sponsor',
+        },
+      ],
+      influenceLevel: 'high',
+      interestLevel: 'medium',
+      notes: 'Very focused on ROI and cost efficiency. Prefers concise communications.',
+      lastContact: '2023-02-20',
+      upcomingInteractions: [
+        {
+          type: 'call',
+          date: '2023-03-18',
+          description: 'Budget review call',
+        },
+      ],
+    },
+  ];
+};
+
+// Mock function to fetch projects
+const fetchProjects = async (): Promise<{ id: string; title: string }[]> => {
+  // In a real app, this would be an API call
+  return [
+    { id: '101', title: 'Website Redesign' },
+    { id: '102', title: 'Brand Refresh' },
+    { id: '103', title: 'System Integration' },
+    { id: '104', title: 'Mobile App Development' },
+    { id: '105', title: 'Financial System Upgrade' },
+    { id: '106', title: 'Data Migration' },
+    { id: '107', title: 'E-commerce Platform' },
   ];
 };
 
 const Stakeholders = () => {
   const [stakeholders, setStakeholders] = useState<Stakeholder[]>([]);
+  const [projects, setProjects] = useState<{ id: string; title: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterInfluence, setFilterInfluence] = useState('All');
   const [filterInterest, setFilterInterest] = useState('All');
+  const [filterTag, setFilterTag] = useState('All');
+  const [filterCompany, setFilterCompany] = useState('All');
   const [showFilters, setShowFilters] = useState(false);
+  const [isStakeholderFormOpen, setIsStakeholderFormOpen] = useState(false);
+  const [isInteractionFormOpen, setIsInteractionFormOpen] = useState(false);
+  const [currentStakeholder, setCurrentStakeholder] = useState<Stakeholder | undefined>(undefined);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
-    const loadStakeholders = async () => {
+    const loadData = async () => {
       try {
-        const data = await fetchStakeholders();
-        setStakeholders(data);
+        const [stakeholdersData, projectsData] = await Promise.all([
+          fetchStakeholders(),
+          fetchProjects(),
+        ]);
+        setStakeholders(stakeholdersData);
+        setProjects(projectsData);
       } catch (error) {
-        console.error('Error loading stakeholders:', error);
+        console.error('Error loading data:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    loadStakeholders();
+    loadData();
   }, []);
+
+  // Get unique tags and companies for filters
+  const allTags = Array.from(new Set(stakeholders.flatMap(s => s.tags)));
+  const allCompanies = Array.from(new Set(stakeholders.map(s => s.company)));
 
   // Filter stakeholders based on search term and filters
   const filteredStakeholders = stakeholders.filter((stakeholder) => {
-    const matchesSearch = stakeholder.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch = searchTerm === '' || 
+                         stakeholder.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          stakeholder.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          stakeholder.company.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesInfluence = filterInfluence === 'All' || stakeholder.influenceLevel === filterInfluence.toLowerCase();
     const matchesInterest = filterInterest === 'All' || stakeholder.interestLevel === filterInterest.toLowerCase();
+    const matchesTag = filterTag === 'All' || stakeholder.tags.includes(filterTag);
+    const matchesCompany = filterCompany === 'All' || stakeholder.company === filterCompany;
     
-    return matchesSearch && matchesInfluence && matchesInterest;
+    return matchesSearch && matchesInfluence && matchesInterest && matchesTag && matchesCompany;
   });
 
   // Handle CSV import
@@ -193,12 +260,12 @@ const Stakeholders = () => {
         email: item['Email'] || '',
         phone: item['Phone'] || '',
       },
-      tags: [],
+      tags: item['Tags'] ? item['Tags'].split(',').map(tag => tag.trim()) : [],
       projects: [],
       influenceLevel: (item['Influence Level']?.toLowerCase() || 'medium') as 'high' | 'medium' | 'low',
       interestLevel: (item['Interest Level']?.toLowerCase() || 'medium') as 'high' | 'medium' | 'low',
-      notes: '',
-      lastContact: new Date().toISOString().split('T')[0],
+      notes: item['Notes'] || '',
+      lastContact: item['Last Contact'] || new Date().toISOString().split('T')[0],
       upcomingInteractions: [],
     }));
     
@@ -206,31 +273,53 @@ const Stakeholders = () => {
     setStakeholders([...stakeholders, ...importedStakeholders]);
   };
 
-  // Get influence level color class
-  const getInfluenceLevelColorClass = (level: string) => {
-    switch (level) {
-      case 'high':
-        return 'bg-red-100 text-red-800';
-      case 'medium':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'low':
-        return 'bg-green-100 text-green-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
+  // Handle stakeholder edit
+  const handleStakeholderEdit = (stakeholder: Stakeholder) => {
+    setCurrentStakeholder(stakeholder);
+    setIsEditMode(true);
+    setIsStakeholderFormOpen(true);
+  };
+
+  // Handle stakeholder delete
+  const handleStakeholderDelete = (stakeholderId: string) => {
+    setStakeholders(stakeholders.filter(s => s.id !== stakeholderId));
+  };
+
+  // Handle add new stakeholder
+  const handleAddStakeholder = () => {
+    setCurrentStakeholder(undefined);
+    setIsEditMode(false);
+    setIsStakeholderFormOpen(true);
+  };
+
+  // Handle save stakeholder
+  const handleSaveStakeholder = (stakeholder: Stakeholder) => {
+    if (isEditMode) {
+      // Update existing stakeholder
+      setStakeholders(stakeholders.map(s => s.id === stakeholder.id ? stakeholder : s));
+    } else {
+      // Add new stakeholder
+      setStakeholders([...stakeholders, stakeholder]);
     }
   };
 
-  // Get interest level color class
-  const getInterestLevelColorClass = (level: string) => {
-    switch (level) {
-      case 'high':
-        return 'bg-blue-100 text-blue-800';
-      case 'medium':
-        return 'bg-purple-100 text-purple-800';
-      case 'low':
-        return 'bg-gray-100 text-gray-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
+  // Handle add interaction
+  const handleAddInteraction = (stakeholderId: string) => {
+    const stakeholder = stakeholders.find(s => s.id === stakeholderId);
+    if (stakeholder) {
+      setCurrentStakeholder(stakeholder);
+      setIsInteractionFormOpen(true);
+    }
+  };
+
+  // Handle save interaction
+  const handleSaveInteraction = (interaction: Interaction) => {
+    if (currentStakeholder) {
+      const updatedStakeholder = {
+        ...currentStakeholder,
+        upcomingInteractions: [...currentStakeholder.upcomingInteractions, interaction],
+      };
+      setStakeholders(stakeholders.map(s => s.id === currentStakeholder.id ? updatedStakeholder : s));
     }
   };
 
@@ -241,15 +330,16 @@ const Stakeholders = () => {
       <div className="px-4 sm:px-6 lg:px-8 py-8">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
-            <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Stakeholder Nexus</h1>
-            <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
+            <h1 className="text-2xl font-semibold text-neutral-800 dark:text-white">Stakeholder Nexus</h1>
+            <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
               Manage relationships with key stakeholders and track interactions.
             </p>
           </div>
           <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
             <button
               type="button"
-              className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:w-auto"
+              onClick={handleAddStakeholder}
+              className="inline-flex items-center justify-center rounded-md border border-transparent bg-[#003366] px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-[#041C2C] focus:outline-none focus:ring-2 focus:ring-[#7D9BC1] focus:ring-offset-2 sm:w-auto"
             >
               <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
               Add Stakeholder
@@ -261,11 +351,11 @@ const Stakeholders = () => {
         <div className="mt-6 flex flex-col sm:flex-row justify-between space-y-4 sm:space-y-0 sm:space-x-4">
           <div className="relative flex-1 max-w-md">
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+              <MagnifyingGlassIcon className="h-5 w-5 text-neutral-400" aria-hidden="true" />
             </div>
             <input
               type="text"
-              className="block w-full rounded-md border-gray-300 pl-10 focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="block w-full rounded-md border-neutral-300 pl-10 focus:border-[#003366] focus:ring-[#003366] sm:text-sm dark:bg-neutral-700 dark:border-neutral-600 dark:text-white"
               placeholder="Search stakeholders..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -276,11 +366,11 @@ const Stakeholders = () => {
             <button
               type="button"
               onClick={() => setShowFilters(!showFilters)}
-              className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:bg-gray-600"
+              className="inline-flex items-center rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-700 shadow-sm hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-[#003366] focus:ring-offset-2 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-neutral-700"
             >
-              <FunnelIcon className="-ml-1 mr-2 h-5 w-5 text-gray-400" aria-hidden="true" />
+              <FunnelIcon className="-ml-1 mr-2 h-5 w-5 text-neutral-400" aria-hidden="true" />
               Filters
-              <ChevronDownIcon className="ml-2 -mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+              <ChevronDownIcon className="ml-2 -mr-1 h-5 w-5 text-neutral-400" aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -296,199 +386,124 @@ const Stakeholders = () => {
 
         {/* Filters dropdown */}
         {showFilters && (
-          <div className="mt-4 p-4 bg-white dark:bg-gray-800 rounded-md shadow">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="mt-4 p-4 bg-white dark:bg-neutral-800 rounded-md shadow">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
-                <label htmlFor="influence-filter" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label htmlFor="influence-filter" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                   Influence Level
                 </label>
                 <select
                   id="influence-filter"
-                  className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="mt-1 block w-full rounded-md border-neutral-300 py-2 pl-3 pr-10 text-base focus:border-[#003366] focus:outline-none focus:ring-[#003366] sm:text-sm dark:bg-neutral-700 dark:border-neutral-600 dark:text-white"
                   value={filterInfluence}
                   onChange={(e) => setFilterInfluence(e.target.value)}
                 >
-                  <option value="All">All Levels</option>
-                  <option value="High">High</option>
-                  <option value="Medium">Medium</option>
-                  <option value="Low">Low</option>
+                  <option value="All">All Influence Levels</option>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
                 </select>
               </div>
+              
               <div>
-                <label htmlFor="interest-filter" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label htmlFor="interest-filter" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                   Interest Level
                 </label>
                 <select
                   id="interest-filter"
-                  className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="mt-1 block w-full rounded-md border-neutral-300 py-2 pl-3 pr-10 text-base focus:border-[#003366] focus:outline-none focus:ring-[#003366] sm:text-sm dark:bg-neutral-700 dark:border-neutral-600 dark:text-white"
                   value={filterInterest}
                   onChange={(e) => setFilterInterest(e.target.value)}
                 >
-                  <option value="All">All Levels</option>
-                  <option value="High">High</option>
-                  <option value="Medium">Medium</option>
-                  <option value="Low">Low</option>
+                  <option value="All">All Interest Levels</option>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                </select>
+              </div>
+              
+              <div>
+                <label htmlFor="tag-filter" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                  Tag
+                </label>
+                <select
+                  id="tag-filter"
+                  className="mt-1 block w-full rounded-md border-neutral-300 py-2 pl-3 pr-10 text-base focus:border-[#003366] focus:outline-none focus:ring-[#003366] sm:text-sm dark:bg-neutral-700 dark:border-neutral-600 dark:text-white"
+                  value={filterTag}
+                  onChange={(e) => setFilterTag(e.target.value)}
+                >
+                  <option value="All">All Tags</option>
+                  {allTags.map(tag => (
+                    <option key={tag} value={tag}>{tag}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label htmlFor="company-filter" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                  Company
+                </label>
+                <select
+                  id="company-filter"
+                  className="mt-1 block w-full rounded-md border-neutral-300 py-2 pl-3 pr-10 text-base focus:border-[#003366] focus:outline-none focus:ring-[#003366] sm:text-sm dark:bg-neutral-700 dark:border-neutral-600 dark:text-white"
+                  value={filterCompany}
+                  onChange={(e) => setFilterCompany(e.target.value)}
+                >
+                  <option value="All">All Companies</option>
+                  {allCompanies.map(company => (
+                    <option key={company} value={company}>{company}</option>
+                  ))}
                 </select>
               </div>
             </div>
           </div>
         )}
 
-        {/* Loading state */}
-        {loading && (
-          <div className="mt-6 text-center py-12">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary-600 border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Loading stakeholders...</p>
-          </div>
-        )}
-
-        {/* Stakeholders grid */}
-        {!loading && (
-          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredStakeholders.map((stakeholder) => (
-              <div
-                key={stakeholder.id}
-                className="col-span-1 bg-white dark:bg-gray-800 rounded-lg shadow divide-y divide-gray-200 dark:divide-gray-700"
-              >
-                <div className="p-6">
-                  <div className="flex items-center space-x-4">
-                    <img
-                      className="h-12 w-12 rounded-full"
-                      src={stakeholder.avatar}
-                      alt={stakeholder.name}
-                    />
-                    <div>
-                      <h3 className="text-lg font-medium text-gray-900 dark:text-white">{stakeholder.name}</h3>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {stakeholder.role} at {stakeholder.company}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getInfluenceLevelColorClass(
-                        stakeholder.influenceLevel
-                      )}`}
-                    >
-                      Influence: {stakeholder.influenceLevel.charAt(0).toUpperCase() + stakeholder.influenceLevel.slice(1)}
-                    </span>
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getInterestLevelColorClass(
-                        stakeholder.interestLevel
-                      )}`}
-                    >
-                      Interest: {stakeholder.interestLevel.charAt(0).toUpperCase() + stakeholder.interestLevel.slice(1)}
-                    </span>
-                  </div>
-                  
-                  <div className="mt-4">
-                    <h4 className="text-sm font-medium text-gray-900 dark:text-white">Contact Information</h4>
-                    <div className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                      <p>Email: {stakeholder.contact.email}</p>
-                      <p>Phone: {stakeholder.contact.phone}</p>
-                      {stakeholder.contact.linkedin && <p>LinkedIn: {stakeholder.contact.linkedin}</p>}
-                      {stakeholder.contact.slack && <p>Slack: {stakeholder.contact.slack}</p>}
-                    </div>
-                  </div>
-                  
-                  {stakeholder.projects.length > 0 && (
-                    <div className="mt-4">
-                      <h4 className="text-sm font-medium text-gray-900 dark:text-white">Projects</h4>
-                      <ul className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                        {stakeholder.projects.map((project) => (
-                          <li key={project.id}>
-                            {project.title} - {project.role}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  
-                  {stakeholder.tags.length > 0 && (
-                    <div className="mt-4">
-                      <h4 className="text-sm font-medium text-gray-900 dark:text-white">Tags</h4>
-                      <div className="mt-2 flex flex-wrap gap-1">
-                        {stakeholder.tags.map((tag, index) => (
-                          <span
-                            key={index}
-                            className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  
-                  <div className="mt-4">
-                    <h4 className="text-sm font-medium text-gray-900 dark:text-white">Last Contact</h4>
-                    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{stakeholder.lastContact}</p>
-                  </div>
-                  
-                  {stakeholder.upcomingInteractions.length > 0 && (
-                    <div className="mt-4">
-                      <h4 className="text-sm font-medium text-gray-900 dark:text-white">Upcoming Interactions</h4>
-                      <ul className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                        {stakeholder.upcomingInteractions.map((interaction, index) => (
-                          <li key={index} className="mb-1">
-                            <span className="font-medium">{interaction.date}</span>: {interaction.type} - {interaction.description}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  
-                  <div className="mt-5 flex space-x-2">
-                    <button
-                      type="button"
-                      className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-                    >
-                      View Details
-                    </button>
-                    <button
-                      type="button"
-                      className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-xs font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:bg-gray-600"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    >
-                      Log Interaction
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-        
-        {/* Empty state */}
-        {!loading && filteredStakeholders.length === 0 && (
-          <div className="mt-6 text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow">
-            <svg
-              className="mx-auto h-12 w-12 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-              />
-            </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No stakeholders found</h3>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              Try adjusting your search or filter criteria.
-            </p>
-          </div>
-        )}
+        {/* Stakeholder grid */}
+        <div className="mt-6">
+          {loading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#003366]"></div>
+            </div>
+          ) : filteredStakeholders.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredStakeholders.map((stakeholder) => (
+                <StakeholderCard
+                  key={stakeholder.id}
+                  stakeholder={stakeholder}
+                  onEdit={handleStakeholderEdit}
+                  onDelete={handleStakeholderDelete}
+                  onAddInteraction={handleAddInteraction}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-neutral-500 dark:text-neutral-400">No stakeholders found matching your criteria.</p>
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Stakeholder Form Modal */}
+      <StakeholderForm
+        isOpen={isStakeholderFormOpen}
+        onClose={() => setIsStakeholderFormOpen(false)}
+        onSave={handleSaveStakeholder}
+        stakeholder={currentStakeholder}
+        isEdit={isEditMode}
+        projects={projects}
+      />
+
+      {/* Interaction Form Modal */}
+      {currentStakeholder && (
+        <InteractionForm
+          isOpen={isInteractionFormOpen}
+          onClose={() => setIsInteractionFormOpen(false)}
+          onSave={handleSaveInteraction}
+          stakeholderName={currentStakeholder.name}
+        />
+      )}
     </Layout>
   );
 };
