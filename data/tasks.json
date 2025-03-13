@@ -1,0 +1,289 @@
+[
+  {
+    "id": "task-001",
+    "title": "Finalize design mockups",
+    "description": "Complete all design mockups for homepage, product pages, and checkout flow",
+    "project": {
+      "id": "proj-001",
+      "title": "Website Redesign"
+    },
+    "assignee": {
+      "id": "user-002",
+      "name": "Jane Smith",
+      "avatar": "/avatars/jane.jpg"
+    },
+    "status": "in-progress",
+    "priority": "high",
+    "dueDate": "2025-03-20",
+    "createdDate": "2025-03-01",
+    "tags": ["design", "frontend"],
+    "comments": [
+      {
+        "id": "comment-001",
+        "user": {
+          "id": "user-001",
+          "name": "John Doe",
+          "avatar": "/avatars/john.jpg"
+        },
+        "text": "Please make sure to include mobile versions for all pages",
+        "timestamp": "2025-03-05T14:30:00"
+      }
+    ],
+    "subtasks": [
+      {
+        "id": "subtask-001",
+        "title": "Homepage design",
+        "completed": true
+      },
+      {
+        "id": "subtask-002",
+        "title": "Product page design",
+        "completed": true
+      },
+      {
+        "id": "subtask-003",
+        "title": "Checkout flow design",
+        "completed": false
+      }
+    ],
+    "dependencies": []
+  },
+  {
+    "id": "task-002",
+    "title": "Review content strategy document",
+    "description": "Review and provide feedback on the content strategy document",
+    "project": {
+      "id": "proj-003",
+      "title": "Content Strategy"
+    },
+    "assignee": {
+      "id": "user-001",
+      "name": "John Doe",
+      "avatar": "/avatars/john.jpg"
+    },
+    "status": "to-do",
+    "priority": "medium",
+    "dueDate": "2025-03-18",
+    "createdDate": "2025-03-10",
+    "tags": ["content", "strategy"],
+    "comments": [],
+    "subtasks": [],
+    "dependencies": []
+  },
+  {
+    "id": "task-003",
+    "title": "Prepare stakeholder presentation",
+    "description": "Create presentation slides for the quarterly stakeholder meeting",
+    "project": {
+      "id": "proj-004",
+      "title": "Marketing Campaign"
+    },
+    "assignee": {
+      "id": "user-006",
+      "name": "Sarah Williams",
+      "avatar": "/avatars/sarah.jpg"
+    },
+    "status": "in-progress",
+    "priority": "high",
+    "dueDate": "2025-03-15",
+    "createdDate": "2025-03-05",
+    "tags": ["presentation", "stakeholders"],
+    "comments": [
+      {
+        "id": "comment-002",
+        "user": {
+          "id": "user-008",
+          "name": "Thomas Clark",
+          "avatar": "/avatars/thomas.jpg"
+        },
+        "text": "I've shared some creative concepts that should be included",
+        "timestamp": "2025-03-08T11:15:00"
+      }
+    ],
+    "subtasks": [
+      {
+        "id": "subtask-004",
+        "title": "Gather campaign metrics",
+        "completed": true
+      },
+      {
+        "id": "subtask-005",
+        "title": "Create slide deck",
+        "completed": false
+      },
+      {
+        "id": "subtask-006",
+        "title": "Review with marketing team",
+        "completed": false
+      }
+    ],
+    "dependencies": []
+  },
+  {
+    "id": "task-004",
+    "title": "Test mobile app prototype",
+    "description": "Conduct usability testing on the latest mobile app prototype",
+    "project": {
+      "id": "proj-002",
+      "title": "Mobile App Development"
+    },
+    "assignee": {
+      "id": "user-005",
+      "name": "Michael Brown",
+      "avatar": "/avatars/michael.jpg"
+    },
+    "status": "to-do",
+    "priority": "medium",
+    "dueDate": "2025-03-25",
+    "createdDate": "2025-03-12",
+    "tags": ["testing", "mobile"],
+    "comments": [],
+    "subtasks": [
+      {
+        "id": "subtask-007",
+        "title": "Prepare test scenarios",
+        "completed": false
+      },
+      {
+        "id": "subtask-008",
+        "title": "Recruit test participants",
+        "completed": false
+      },
+      {
+        "id": "subtask-009",
+        "title": "Conduct testing sessions",
+        "completed": false
+      },
+      {
+        "id": "subtask-010",
+        "title": "Compile findings report",
+        "completed": false
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "task-005",
+        "title": "Finalize app prototype"
+      }
+    ]
+  },
+  {
+    "id": "task-005",
+    "title": "Finalize app prototype",
+    "description": "Complete the interactive prototype for the mobile application",
+    "project": {
+      "id": "proj-002",
+      "title": "Mobile App Development"
+    },
+    "assignee": {
+      "id": "user-004",
+      "name": "Emily Davis",
+      "avatar": "/avatars/emily.jpg"
+    },
+    "status": "in-progress",
+    "priority": "high",
+    "dueDate": "2025-03-20",
+    "createdDate": "2025-03-01",
+    "tags": ["development", "mobile"],
+    "comments": [],
+    "subtasks": [
+      {
+        "id": "subtask-011",
+        "title": "User authentication flows",
+        "completed": true
+      },
+      {
+        "id": "subtask-012",
+        "title": "Main navigation",
+        "completed": true
+      },
+      {
+        "id": "subtask-013",
+        "title": "Product browsing experience",
+        "completed": false
+      },
+      {
+        "id": "subtask-014",
+        "title": "Checkout process",
+        "completed": false
+      }
+    ],
+    "dependencies": []
+  },
+  {
+    "id": "task-006",
+    "title": "Update project timeline",
+    "description": "Review and update the project timeline based on current progress",
+    "project": {
+      "id": "proj-001",
+      "title": "Website Redesign"
+    },
+    "assignee": {
+      "id": "user-001",
+      "name": "John Doe",
+      "avatar": "/avatars/john.jpg"
+    },
+    "status": "to-do",
+    "priority": "low",
+    "dueDate": "2025-03-22",
+    "createdDate": "2025-03-15",
+    "tags": ["planning", "timeline"],
+    "comments": [],
+    "subtasks": [],
+    "dependencies": []
+  },
+  {
+    "id": "task-007",
+    "title": "Develop SEO strategy",
+    "description": "Create comprehensive SEO strategy for the new website",
+    "project": {
+      "id": "proj-001",
+      "title": "Website Redesign"
+    },
+    "assignee": {
+      "id": "user-007",
+      "name": "David Wilson",
+      "avatar": "/avatars/david.jpg"
+    },
+    "status": "completed",
+    "priority": "medium",
+    "dueDate": "2025-03-10",
+    "createdDate": "2025-02-20",
+    "tags": ["seo", "strategy"],
+    "comments": [
+      {
+        "id": "comment-003",
+        "user": {
+          "id": "user-001",
+          "name": "John Doe",
+          "avatar": "/avatars/john.jpg"
+        },
+        "text": "Great work! This will be very helpful for the development team.",
+        "timestamp": "2025-03-11T09:45:00"
+      }
+    ],
+    "subtasks": [
+      {
+        "id": "subtask-015",
+        "title": "Keyword research",
+        "completed": true
+      },
+      {
+        "id": "subtask-016",
+        "title": "Competitor analysis",
+        "completed": true
+      },
+      {
+        "id": "subtask-017",
+        "title": "On-page optimization plan",
+        "completed": true
+      },
+      {
+        "id": "subtask-018",
+        "title": "Technical SEO recommendations",
+        "completed": true
+      }
+    ],
+    "dependencies": []
+  }
+]
