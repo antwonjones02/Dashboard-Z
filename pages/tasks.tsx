@@ -11,9 +11,22 @@ import {
 } from '@heroicons/react/24/outline';
 import CSVActions from '../components/CSVActions';
 import { csvTemplates } from '../utils/csvUtils';
+import SEO from '../components/SEO';
+
+// Define Task type
+interface Task {
+  id: number;
+  name: string;
+  description: string;
+  status: string;
+  dueDate: string;
+  priority: string;
+  assignedTo: string;
+  project: string;
+}
 
 // Sample task data
-const initialTasks = [
+const initialTasks: Task[] = [
   {
     id: 1,
     name: 'Create wireframes for homepage',
@@ -77,15 +90,15 @@ const initialTasks = [
 ];
 
 const Tasks = () => {
-  const [tasks, setTasks] = useState(initialTasks);
+  const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('All');
   const [filterPriority, setFilterPriority] = useState('All');
   const [filterProject, setFilterProject] = useState('All');
   const [showFilters, setShowFilters] = useState(false);
 
-  // Get unique project names for filter
-  const projectOptions = ['All', ...new Set(tasks.map(task => task.project))];
+  // Get unique project names for filter - Fixed type error by using Array.from
+  const projectOptions = ['All', ...Array.from(new Set(tasks.map(task => task.project)))];
 
   // Filter tasks based on search term and filters
   const filteredTasks = tasks.filter((task) => {
@@ -103,7 +116,7 @@ const Tasks = () => {
   // Handle CSV import
   const handleImportCSV = (data: Record<string, string>[]) => {
     // Convert imported data to task format
-    const importedTasks = data.map((item, index) => ({
+    const importedTasks: Task[] = data.map((item, index) => ({
       id: tasks.length + index + 1,
       name: item['Task Name'],
       description: item['Description'],
@@ -124,23 +137,23 @@ const Tasks = () => {
       case 'Completed':
         return {
           icon: CheckCircleIcon,
-          bgColor: 'bg-green-100',
-          textColor: 'text-green-800',
-          iconColor: 'text-green-500',
+          bgColor: 'bg-[#041C2C]', // Delta Dark Blue
+          textColor: 'text-white',
+          iconColor: 'text-[#7D9BC1]', // Delta Light Blue
         };
       case 'In Progress':
         return {
           icon: ClockIcon,
-          bgColor: 'bg-blue-100',
-          textColor: 'text-blue-800',
-          iconColor: 'text-blue-500',
+          bgColor: 'bg-[#7D9BC1]', // Delta Light Blue
+          textColor: 'text-[#041C2C]', // Delta Dark Blue
+          iconColor: 'text-[#003366]', // Delta Blue
         };
       case 'Not Started':
         return {
           icon: ExclamationCircleIcon,
-          bgColor: 'bg-yellow-100',
-          textColor: 'text-yellow-800',
-          iconColor: 'text-yellow-500',
+          bgColor: 'bg-[#EAAA00]', // Delta Yellow
+          textColor: 'text-[#041C2C]', // Delta Dark Blue
+          iconColor: 'text-[#003366]', // Delta Blue
         };
       default:
         return {
@@ -156,11 +169,11 @@ const Tasks = () => {
   const getPriorityColorClass = (priority: string) => {
     switch (priority) {
       case 'High':
-        return 'bg-red-100 text-red-800';
+        return 'bg-[#C01933] text-white'; // Delta Red
       case 'Medium':
-        return 'bg-orange-100 text-orange-800';
+        return 'bg-[#FF6900] text-white'; // Delta Orange
       case 'Low':
-        return 'bg-green-100 text-green-800';
+        return 'bg-[#7D9BC1] text-[#041C2C]'; // Delta Light Blue with Dark Blue text
       default:
         return 'bg-gray-100 text-gray-800';
     }
@@ -168,10 +181,12 @@ const Tasks = () => {
 
   return (
     <Layout>
+      <SEO title="Task Flow Manager" description="Manage and organize your tasks across different projects." />
+      
       <div className="px-4 sm:px-6 lg:px-8 py-8">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
-            <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Task Flow Manager</h1>
+            <h1 className="text-2xl font-semibold text-[#003366] dark:text-white">Task Flow Manager</h1>
             <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
               Manage and organize all your tasks across different projects.
             </p>
@@ -179,7 +194,7 @@ const Tasks = () => {
           <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
             <button
               type="button"
-              className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:w-auto"
+              className="inline-flex items-center justify-center rounded-md border border-transparent bg-[#003366] px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-[#041C2C] focus:outline-none focus:ring-2 focus:ring-[#7D9BC1] focus:ring-offset-2 sm:w-auto"
             >
               <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
               Add Task
@@ -195,7 +210,7 @@ const Tasks = () => {
             </div>
             <input
               type="text"
-              className="block w-full rounded-md border-gray-300 pl-10 focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="block w-full rounded-md border-gray-300 pl-10 focus:border-[#003366] focus:ring-[#003366] sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               placeholder="Search tasks..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -206,7 +221,7 @@ const Tasks = () => {
             <button
               type="button"
               onClick={() => setShowFilters(!showFilters)}
-              className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:bg-gray-600"
+              className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#003366] focus:ring-offset-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:bg-gray-600"
             >
               <FunnelIcon className="-ml-1 mr-2 h-5 w-5 text-gray-400" aria-hidden="true" />
               Filters
@@ -221,6 +236,7 @@ const Tasks = () => {
             entityType="tasks"
             headers={csvTemplates.tasks}
             onImport={handleImportCSV}
+            className="text-[#003366]"
           />
         </div>
 
@@ -234,7 +250,7 @@ const Tasks = () => {
                 </label>
                 <select
                   id="status-filter"
-                  className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-[#003366] focus:outline-none focus:ring-[#003366] sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
                 >
@@ -250,7 +266,7 @@ const Tasks = () => {
                 </label>
                 <select
                   id="priority-filter"
-                  className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-[#003366] focus:outline-none focus:ring-[#003366] sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   value={filterPriority}
                   onChange={(e) => setFilterPriority(e.target.value)}
                 >
@@ -266,7 +282,7 @@ const Tasks = () => {
                 </label>
                 <select
                   id="project-filter"
-                  className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-[#003366] focus:outline-none focus:ring-[#003366] sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   value={filterProject}
                   onChange={(e) => setFilterProject(e.target.value)}
                 >
@@ -294,7 +310,7 @@ const Tasks = () => {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <StatusIcon className={`h-5 w-5 ${statusDetails.iconColor} mr-2`} aria-hidden="true" />
-                        <p className="text-sm font-medium text-primary-600 truncate">{task.name}</p>
+                        <p className="text-sm font-medium text-[#003366] dark:text-[#7D9BC1] truncate">{task.name}</p>
                       </div>
                       <div className="ml-2 flex-shrink-0 flex">
                         <span
@@ -331,20 +347,20 @@ const Tasks = () => {
                     <div className="mt-3 flex space-x-2">
                       <button
                         type="button"
-                        className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                        className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-[#003366] hover:bg-[#041C2C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#003366]"
                       >
                         View Details
                       </button>
                       <button
                         type="button"
-                        className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs font-medium rounded shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:bg-gray-600"
+                        className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs font-medium rounded shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#003366] dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:bg-gray-600"
                       >
                         Edit
                       </button>
                       {task.status !== 'Completed' && (
                         <button
                           type="button"
-                          className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                          className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-[#C01933] hover:bg-[#991933] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C01933]"
                         >
                           Mark Complete
                         </button>
