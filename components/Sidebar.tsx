@@ -109,7 +109,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
         </Dialog>
       </Transition.Root>
 
-      {/* Desktop sidebar */}
+      {/* Desktop sidebar - fixed position with specific width */}
       <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
         <div className="flex-1 flex flex-col min-h-0 bg-white dark:bg-neutral-800 border-r border-neutral-200 dark:border-neutral-700">
           <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
