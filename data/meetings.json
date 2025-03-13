@@ -1,0 +1,345 @@
+[
+  {
+    "id": "meeting-001",
+    "title": "Weekly Team Sync",
+    "description": "Regular team meeting to discuss project progress and blockers",
+    "date": "2025-03-14T10:00:00",
+    "endDate": "2025-03-14T11:00:00",
+    "duration": 60,
+    "location": {
+      "type": "virtual",
+      "details": "Zoom Meeting ID: 123-456-7890"
+    },
+    "organizer": {
+      "id": "user-001",
+      "name": "John Doe",
+      "avatar": "/avatars/john.jpg"
+    },
+    "attendees": [
+      {
+        "id": "user-001",
+        "name": "John Doe",
+        "avatar": "/avatars/john.jpg",
+        "status": "accepted"
+      },
+      {
+        "id": "user-002",
+        "name": "Jane Smith",
+        "avatar": "/avatars/jane.jpg",
+        "status": "accepted"
+      },
+      {
+        "id": "user-003",
+        "name": "Robert Johnson",
+        "avatar": "/avatars/robert.jpg",
+        "status": "accepted"
+      },
+      {
+        "id": "user-004",
+        "name": "Emily Davis",
+        "avatar": "/avatars/emily.jpg",
+        "status": "tentative"
+      }
+    ],
+    "agenda": [
+      "Project status updates (15 min)",
+      "Blockers and challenges (15 min)",
+      "Next week priorities (15 min)",
+      "Open discussion (15 min)"
+    ],
+    "notes": "",
+    "relatedProjects": [
+      {
+        "id": "proj-001",
+        "title": "Website Redesign"
+      },
+      {
+        "id": "proj-002",
+        "title": "Mobile App Development"
+      }
+    ],
+    "relatedDocuments": [
+      {
+        "id": "doc-001",
+        "title": "Weekly Status Report",
+        "url": "/documents/weekly-status-report.pdf"
+      }
+    ],
+    "recurring": {
+      "frequency": "weekly",
+      "day": "friday",
+      "endDate": null
+    }
+  },
+  {
+    "id": "meeting-002",
+    "title": "Project Kickoff: Marketing Campaign",
+    "description": "Initial kickoff meeting for the Q2 marketing campaign",
+    "date": "2025-03-15T14:30:00",
+    "endDate": "2025-03-15T16:00:00",
+    "duration": 90,
+    "location": {
+      "type": "virtual",
+      "details": "Google Meet: meet.google.com/abc-defg-hij"
+    },
+    "organizer": {
+      "id": "user-006",
+      "name": "Sarah Williams",
+      "avatar": "/avatars/sarah.jpg"
+    },
+    "attendees": [
+      {
+        "id": "user-001",
+        "name": "John Doe",
+        "avatar": "/avatars/john.jpg",
+        "status": "accepted"
+      },
+      {
+        "id": "user-006",
+        "name": "Sarah Williams",
+        "avatar": "/avatars/sarah.jpg",
+        "status": "accepted"
+      },
+      {
+        "id": "user-008",
+        "name": "Thomas Clark",
+        "avatar": "/avatars/thomas.jpg",
+        "status": "accepted"
+      }
+    ],
+    "agenda": [
+      "Campaign objectives and KPIs (20 min)",
+      "Target audience and messaging (20 min)",
+      "Channel strategy (20 min)",
+      "Timeline and next steps (20 min)",
+      "Q&A (10 min)"
+    ],
+    "notes": "",
+    "relatedProjects": [
+      {
+        "id": "proj-004",
+        "title": "Marketing Campaign"
+      }
+    ],
+    "relatedDocuments": [
+      {
+        "id": "doc-002",
+        "title": "Campaign Brief",
+        "url": "/documents/campaign-brief.pdf"
+      },
+      {
+        "id": "doc-003",
+        "title": "Q2 Marketing Budget",
+        "url": "/documents/q2-marketing-budget.xlsx"
+      }
+    ],
+    "recurring": null
+  },
+  {
+    "id": "meeting-003",
+    "title": "Client Presentation",
+    "description": "Present website redesign progress to the client",
+    "date": "2025-03-16T11:00:00",
+    "endDate": "2025-03-16T13:00:00",
+    "duration": 120,
+    "location": {
+      "type": "in-person",
+      "details": "Client HQ, 123 Business Ave, Conference Room A"
+    },
+    "organizer": {
+      "id": "user-001",
+      "name": "John Doe",
+      "avatar": "/avatars/john.jpg"
+    },
+    "attendees": [
+      {
+        "id": "user-001",
+        "name": "John Doe",
+        "avatar": "/avatars/john.jpg",
+        "status": "accepted"
+      },
+      {
+        "id": "user-002",
+        "name": "Jane Smith",
+        "avatar": "/avatars/jane.jpg",
+        "status": "accepted"
+      },
+      {
+        "id": "user-004",
+        "name": "Emily Davis",
+        "avatar": "/avatars/emily.jpg",
+        "status": "accepted"
+      },
+      {
+        "id": "external-001",
+        "name": "David Wilson",
+        "company": "Client Co.",
+        "status": "accepted"
+      },
+      {
+        "id": "external-002",
+        "name": "Client Team",
+        "company": "Client Co.",
+        "status": "accepted"
+      }
+    ],
+    "agenda": [
+      "Project progress overview (15 min)",
+      "Design presentation (45 min)",
+      "Timeline and next milestones (15 min)",
+      "Feedback and discussion (45 min)"
+    ],
+    "notes": "Bring printed copies of the design mockups. Ensure the presentation includes mobile versions.",
+    "relatedProjects": [
+      {
+        "id": "proj-001",
+        "title": "Website Redesign"
+      }
+    ],
+    "relatedDocuments": [
+      {
+        "id": "doc-004",
+        "title": "Website Design Mockups",
+        "url": "/documents/website-mockups.pdf"
+      },
+      {
+        "id": "doc-005",
+        "title": "Project Timeline",
+        "url": "/documents/project-timeline.pdf"
+      }
+    ],
+    "recurring": null
+  },
+  {
+    "id": "meeting-004",
+    "title": "Design Review",
+    "description": "Review and provide feedback on the latest design iterations",
+    "date": "2025-03-17T15:00:00",
+    "endDate": "2025-03-17T16:00:00",
+    "duration": 60,
+    "location": {
+      "type": "virtual",
+      "details": "Microsoft Teams"
+    },
+    "organizer": {
+      "id": "user-002",
+      "name": "Jane Smith",
+      "avatar": "/avatars/jane.jpg"
+    },
+    "attendees": [
+      {
+        "id": "user-001",
+        "name": "John Doe",
+        "avatar": "/avatars/john.jpg",
+        "status": "accepted"
+      },
+      {
+        "id": "user-002",
+        "name": "Jane Smith",
+        "avatar": "/avatars/jane.jpg",
+        "status": "accepted"
+      },
+      {
+        "id": "user-008",
+        "name": "Thomas Clark",
+        "avatar": "/avatars/thomas.jpg",
+        "status": "declined"
+      },
+      {
+        "id": "user-005",
+        "name": "Michael Brown",
+        "avatar": "/avatars/michael.jpg",
+        "status": "accepted"
+      }
+    ],
+    "agenda": [
+      "Review design updates (20 min)",
+      "Discuss feedback from previous iteration (20 min)",
+      "Agree on final changes (20 min)"
+    ],
+    "notes": "",
+    "relatedProjects": [
+      {
+        "id": "proj-001",
+        "title": "Website Redesign"
+      }
+    ],
+    "relatedDocuments": [
+      {
+        "id": "doc-006",
+        "title": "Design Feedback Document",
+        "url": "/documents/design-feedback.pdf"
+      }
+    ],
+    "recurring": null
+  },
+  {
+    "id": "meeting-005",
+    "title": "API Integration Planning",
+    "description": "Plan the integration between the mobile app and backend APIs",
+    "date": "2025-03-18T13:00:00",
+    "endDate": "2025-03-18T14:30:00",
+    "duration": 90,
+    "location": {
+      "type": "virtual",
+      "details": "Zoom Meeting"
+    },
+    "organizer": {
+      "id": "user-004",
+      "name": "Emily Davis",
+      "avatar": "/avatars/emily.jpg"
+    },
+    "attendees": [
+      {
+        "id": "user-001",
+        "name": "John Doe",
+        "avatar": "/avatars/john.jpg",
+        "status": "accepted"
+      },
+      {
+        "id": "user-003",
+        "name": "Robert Johnson",
+        "avatar": "/avatars/robert.jpg",
+        "status": "accepted"
+      },
+      {
+        "id": "user-004",
+        "name": "Emily Davis",
+        "avatar": "/avatars/emily.jpg",
+        "status": "accepted"
+      },
+      {
+        "id": "user-010",
+        "name": "Alex Chen",
+        "avatar": "/avatars/alex.jpg",
+        "status": "accepted"
+      }
+    ],
+    "agenda": [
+      "API requirements overview (20 min)",
+      "Authentication approach (20 min)",
+      "Data models and endpoints (30 min)",
+      "Implementation plan and timeline (20 min)"
+    ],
+    "notes": "",
+    "relatedProjects": [
+      {
+        "id": "proj-002",
+        "title": "Mobile App Development"
+      }
+    ],
+    "relatedDocuments": [
+      {
+        "id": "doc-007",
+        "title": "API Documentation",
+        "url": "/documents/api-docs.pdf"
+      },
+      {
+        "id": "doc-008",
+        "title": "Data Models",
+        "url": "/documents/data-models.pdf"
+      }
+    ],
+    "recurring": null
+  }
+]
