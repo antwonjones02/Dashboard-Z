@@ -1,168 +1,388 @@
-import Head from 'next/head';
-import { useEffect, useState } from 'react';
-import Layout from '@/components/Layout';
-import { fetchTasks } from '@/services/api';
-import { CheckCircleIcon } from '@heroicons/react/24/solid';
-import { ClockIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
+import React, { useState } from 'react';
+import Layout from '../components/Layout';
+import { 
+  MagnifyingGlassIcon, 
+  FunnelIcon, 
+  PlusIcon,
+  ChevronDownIcon,
+  CheckCircleIcon,
+  ClockIcon,
+  ExclamationCircleIcon
+} from '@heroicons/react/24/outline';
+import CSVActions from '../components/CSVActions';
+import { csvTemplates } from '../utils/csvUtils';
 
-export default function Tasks() {
-  const [tasks, setTasks] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [activeFilter, setActiveFilter] = useState('all');
+// Sample task data
+const initialTasks = [
+  {
+    id: 1,
+    name: 'Create wireframes for homepage',
+    description: 'Design wireframes for the new homepage layout',
+    status: 'Completed',
+    dueDate: '2023-02-15',
+    priority: 'High',
+    assignedTo: 'Jane Smith',
+    project: 'Website Redesign',
+  },
+  {
+    id: 2,
+    name: 'Develop user authentication',
+    description: 'Implement user login and registration functionality',
+    status: 'In Progress',
+    dueDate: '2023-03-10',
+    priority: 'High',
+    assignedTo: 'John Doe',
+    project: 'Mobile App Development',
+  },
+  {
+    id: 3,
+    name: 'Write API documentation',
+    description: 'Document all API endpoints and parameters',
+    status: 'Not Started',
+    dueDate: '2023-03-25',
+    priority: 'Medium',
+    assignedTo: 'Mike Johnson',
+    project: 'Mobile App Development',
+  },
+  {
+    id: 4,
+    name: 'Test payment gateway integration',
+    description: 'Verify payment processing works correctly',
+    status: 'In Progress',
+    dueDate: '2023-03-05',
+    priority: 'High',
+    assignedTo: 'Sarah Williams',
+    project: 'E-commerce Platform',
+  },
+  {
+    id: 5,
+    name: 'Create content for about page',
+    description: 'Write copy for the about us section',
+    status: 'Not Started',
+    dueDate: '2023-03-20',
+    priority: 'Low',
+    assignedTo: 'Jane Smith',
+    project: 'Website Redesign',
+  },
+  {
+    id: 6,
+    name: 'Optimize database queries',
+    description: 'Improve performance of slow database operations',
+    status: 'In Progress',
+    dueDate: '2023-03-15',
+    priority: 'Medium',
+    assignedTo: 'John Doe',
+    project: 'Data Migration',
+  },
+];
 
-  useEffect(() => {
-    const loadTasks = async () => {
-      try {
-        const data = await fetchTasks();
-        setTasks(data);
-      } catch (error) {
-        console.error('Error loading tasks:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+const Tasks = () => {
+  const [tasks, setTasks] = useState(initialTasks);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState('All');
+  const [filterPriority, setFilterPriority] = useState('All');
+  const [filterProject, setFilterProject] = useState('All');
+  const [showFilters, setShowFilters] = useState(false);
 
-    loadTasks();
-  }, []);
+  // Get unique project names for filter
+  const projectOptions = ['All', ...new Set(tasks.map(task => task.project))];
 
-  const priorityColors = {
-    high: 'text-danger-600 dark:text-danger-400',
-    medium: 'text-warning-600 dark:text-warning-400',
-    low: 'text-success-600 dark:text-success-400',
-  };
-
-  const priorityIcons = {
-    high: <ExclamationCircleIcon className="h-5 w-5 text-danger-600 dark:text-danger-400" />,
-    medium: <ClockIcon className="h-5 w-5 text-warning-600 dark:text-warning-400" />,
-    low: <CheckCircleIcon className="h-5 w-5 text-success-600 dark:text-success-400" />,
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  };
-
-  const isOverdue = (dateString: string) => {
-    const today = new Date();
-    const dueDate = new Date(dateString);
-    return dueDate < today;
-  };
-
-  const filteredTasks = tasks.filter((task: any) => {
-    if (activeFilter === 'all') return true;
-    if (activeFilter === 'completed') return task.status === 'completed';
-    if (activeFilter === 'in-progress') return task.status === 'in-progress';
-    if (activeFilter === 'to-do') return task.status === 'to-do';
-    return true;
+  // Filter tasks based on search term and filters
+  const filteredTasks = tasks.filter((task) => {
+    const matchesSearch = task.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         task.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         task.assignedTo.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesStatus = filterStatus === 'All' || task.status === filterStatus;
+    const matchesPriority = filterPriority === 'All' || task.priority === filterPriority;
+    const matchesProject = filterProject === 'All' || task.project === filterProject;
+    
+    return matchesSearch && matchesStatus && matchesPriority && matchesProject;
   });
 
+  // Handle CSV import
+  const handleImportCSV = (data: Record<string, string>[]) => {
+    // Convert imported data to task format
+    const importedTasks = data.map((item, index) => ({
+      id: tasks.length + index + 1,
+      name: item['Task Name'],
+      description: item['Description'],
+      status: item['Status'],
+      dueDate: item['Due Date'],
+      priority: item['Priority'],
+      assignedTo: item['Assigned To'],
+      project: item['Project'],
+    }));
+    
+    // Add imported tasks to existing tasks
+    setTasks([...tasks, ...importedTasks]);
+  };
+
+  // Get status icon and color
+  const getStatusDetails = (status: string) => {
+    switch (status) {
+      case 'Completed':
+        return {
+          icon: CheckCircleIcon,
+          bgColor: 'bg-green-100',
+          textColor: 'text-green-800',
+          iconColor: 'text-green-500',
+        };
+      case 'In Progress':
+        return {
+          icon: ClockIcon,
+          bgColor: 'bg-blue-100',
+          textColor: 'text-blue-800',
+          iconColor: 'text-blue-500',
+        };
+      case 'Not Started':
+        return {
+          icon: ExclamationCircleIcon,
+          bgColor: 'bg-yellow-100',
+          textColor: 'text-yellow-800',
+          iconColor: 'text-yellow-500',
+        };
+      default:
+        return {
+          icon: ExclamationCircleIcon,
+          bgColor: 'bg-gray-100',
+          textColor: 'text-gray-800',
+          iconColor: 'text-gray-500',
+        };
+    }
+  };
+
+  // Get priority color class
+  const getPriorityColorClass = (priority: string) => {
+    switch (priority) {
+      case 'High':
+        return 'bg-red-100 text-red-800';
+      case 'Medium':
+        return 'bg-orange-100 text-orange-800';
+      case 'Low':
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
   return (
-    <>
-      <Head>
-        <title>Task Flow Manager | Workflow Nexus</title>
-        <meta name="description" content="Manage and organize your tasks efficiently" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <Layout>
-        <div className="space-y-6">
-          <div>
-            <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Task Flow Manager</h1>
-            <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-              Manage and organize your tasks efficiently
+    <Layout>
+      <div className="px-4 sm:px-6 lg:px-8 py-8">
+        <div className="sm:flex sm:items-center">
+          <div className="sm:flex-auto">
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Task Flow Manager</h1>
+            <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
+              Manage and organize all your tasks across different projects.
             </p>
           </div>
-
-          {/* Task filters */}
-          <div className="flex flex-wrap gap-2">
-            <button 
-              className={`btn ${activeFilter === 'all' ? 'btn-primary' : 'btn-outline'}`}
-              onClick={() => setActiveFilter('all')}
+          <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <button
+              type="button"
+              className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:w-auto"
             >
-              All Tasks
-            </button>
-            <button 
-              className={`btn ${activeFilter === 'to-do' ? 'btn-primary' : 'btn-outline'}`}
-              onClick={() => setActiveFilter('to-do')}
-            >
-              To Do
-            </button>
-            <button 
-              className={`btn ${activeFilter === 'in-progress' ? 'btn-primary' : 'btn-outline'}`}
-              onClick={() => setActiveFilter('in-progress')}
-            >
-              In Progress
-            </button>
-            <button 
-              className={`btn ${activeFilter === 'completed' ? 'btn-primary' : 'btn-outline'}`}
-              onClick={() => setActiveFilter('completed')}
-            >
-              Completed
+              <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+              Add Task
             </button>
           </div>
+        </div>
 
-          {/* Tasks list */}
-          <div className="space-y-4">
-            {loading ? (
-              <p>Loading tasks...</p>
-            ) : (
-              filteredTasks.map((task: any) => (
-                <div 
-                  key={task.id} 
-                  className="card p-4 hover:shadow-card-hover transition-shadow duration-300"
+        {/* Search and filters */}
+        <div className="mt-6 flex flex-col sm:flex-row justify-between space-y-4 sm:space-y-0 sm:space-x-4">
+          <div className="relative flex-1 max-w-md">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+            </div>
+            <input
+              type="text"
+              className="block w-full rounded-md border-gray-300 pl-10 focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              placeholder="Search tasks..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+
+          <div className="flex space-x-2">
+            <button
+              type="button"
+              onClick={() => setShowFilters(!showFilters)}
+              className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:bg-gray-600"
+            >
+              <FunnelIcon className="-ml-1 mr-2 h-5 w-5 text-gray-400" aria-hidden="true" />
+              Filters
+              <ChevronDownIcon className="ml-2 -mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+            </button>
+          </div>
+        </div>
+
+        {/* CSV Import/Export */}
+        <div className="mt-4">
+          <CSVActions
+            entityType="tasks"
+            headers={csvTemplates.tasks}
+            onImport={handleImportCSV}
+          />
+        </div>
+
+        {/* Filters dropdown */}
+        {showFilters && (
+          <div className="mt-4 p-4 bg-white dark:bg-gray-800 rounded-md shadow">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label htmlFor="status-filter" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Status
+                </label>
+                <select
+                  id="status-filter"
+                  className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
                 >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start space-x-3">
-                      <div className="mt-0.5">
-                        {priorityIcons[task.priority as keyof typeof priorityIcons]}
+                  <option value="All">All Statuses</option>
+                  <option value="Not Started">Not Started</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="priority-filter" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Priority
+                </label>
+                <select
+                  id="priority-filter"
+                  className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  value={filterPriority}
+                  onChange={(e) => setFilterPriority(e.target.value)}
+                >
+                  <option value="All">All Priorities</option>
+                  <option value="High">High</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Low">Low</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="project-filter" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Project
+                </label>
+                <select
+                  id="project-filter"
+                  className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  value={filterProject}
+                  onChange={(e) => setFilterProject(e.target.value)}
+                >
+                  {projectOptions.map((project) => (
+                    <option key={project} value={project}>
+                      {project}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tasks list */}
+        <div className="mt-6 bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-md">
+          <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+            {filteredTasks.map((task) => {
+              const statusDetails = getStatusDetails(task.status);
+              const StatusIcon = statusDetails.icon;
+              
+              return (
+                <li key={task.id}>
+                  <div className="px-4 py-4 sm:px-6">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <StatusIcon className={`h-5 w-5 ${statusDetails.iconColor} mr-2`} aria-hidden="true" />
+                        <p className="text-sm font-medium text-primary-600 truncate">{task.name}</p>
                       </div>
-                      <div>
-                        <h4 className="text-base font-medium text-neutral-900 dark:text-neutral-100">{task.title}</h4>
-                        <div className="flex items-center space-x-2 mt-1">
-                          <span className="text-xs text-neutral-500 dark:text-neutral-400">{task.project.title}</span>
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-200">
-                            {task.status}
-                          </span>
-                          <span className={`text-xs font-medium ${isOverdue(task.dueDate) ? 'text-danger-600 dark:text-danger-400' : 'text-neutral-500 dark:text-neutral-400'}`}>
-                            Due {formatDate(task.dueDate)}
-                          </span>
-                        </div>
+                      <div className="ml-2 flex-shrink-0 flex">
+                        <span
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getPriorityColorClass(
+                            task.priority
+                          )}`}
+                        >
+                          {task.priority}
+                        </span>
                       </div>
                     </div>
-                    <div>
-                      {task.assignee && (
-                        <div className="flex items-center justify-center h-8 w-8 rounded-full bg-neutral-200 dark:bg-neutral-700 text-xs font-medium text-neutral-800 dark:text-neutral-200 border border-white dark:border-neutral-800">
-                          {task.assignee.name.charAt(0)}
-                        </div>
+                    <div className="mt-2 sm:flex sm:justify-between">
+                      <div className="sm:flex">
+                        <p className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                          {task.description}
+                        </p>
+                      </div>
+                      <div className="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-400 sm:mt-0">
+                        <p>Due on {task.dueDate}</p>
+                      </div>
+                    </div>
+                    <div className="mt-2 sm:flex sm:justify-between">
+                      <div className="sm:flex">
+                        <p className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                          <span className="font-medium text-gray-900 dark:text-white mr-1">Project:</span> {task.project}
+                        </p>
+                      </div>
+                      <div className="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-400 sm:mt-0">
+                        <p>
+                          <span className="font-medium text-gray-900 dark:text-white mr-1">Assigned to:</span> {task.assignedTo}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="mt-3 flex space-x-2">
+                      <button
+                        type="button"
+                        className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                      >
+                        View Details
+                      </button>
+                      <button
+                        type="button"
+                        className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 text-xs font-medium rounded shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:bg-gray-600"
+                      >
+                        Edit
+                      </button>
+                      {task.status !== 'Completed' && (
+                        <button
+                          type="button"
+                          className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                        >
+                          Mark Complete
+                        </button>
                       )}
                     </div>
                   </div>
-                  
-                  {task.description && (
-                    <p className="mt-3 text-sm text-neutral-600 dark:text-neutral-400">
-                      {task.description}
-                    </p>
-                  )}
-                  
-                  {task.subtasks && task.subtasks.length > 0 && (
-                    <div className="mt-3">
-                      <h5 className="text-xs font-medium text-neutral-700 dark:text-neutral-300 mb-2">Subtasks</h5>
-                      <div className="space-y-1">
-                        {task.subtasks.map((subtask: any) => (
-                          <div key={subtask.id} className="flex items-center">
-                            <div className={`h-4 w-4 rounded-full mr-2 ${subtask.completed ? 'bg-success-500' : 'bg-neutral-300 dark:bg-neutral-600'}`}></div>
-                            <span className="text-xs text-neutral-600 dark:text-neutral-400">{subtask.title}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))
-            )}
-          </div>
+                </li>
+              );
+            })}
+          </ul>
+          
+          {/* Empty state */}
+          {filteredTasks.length === 0 && (
+            <div className="text-center py-12">
+              <svg
+                className="mx-auto h-12 w-12 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                />
+              </svg>
+              <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No tasks found</h3>
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                Try adjusting your search or filter criteria.
+              </p>
+            </div>
+          )}
         </div>
-      </Layout>
-    </>
+      </div>
+    </Layout>
   );
-}
+};
+
+export default Tasks;
