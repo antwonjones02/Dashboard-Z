@@ -1,0 +1,377 @@
+[
+  {
+    "id": "stakeholder-001",
+    "name": "Sarah Williams",
+    "role": "Marketing Director",
+    "company": "Acme Inc.",
+    "avatar": "/avatars/sarah.jpg",
+    "contact": {
+      "email": "sarah.williams@acmeinc.com",
+      "phone": "+1 (555) 123-4567",
+      "linkedin": "linkedin.com/in/sarahwilliams"
+    },
+    "tags": ["internal", "marketing", "decision-maker"],
+    "projects": [
+      {
+        "id": "proj-004",
+        "title": "Marketing Campaign",
+        "role": "Project Owner"
+      },
+      {
+        "id": "proj-003",
+        "title": "Content Strategy",
+        "role": "Stakeholder"
+      }
+    ],
+    "notes": "Sarah prefers communication via email and likes to receive weekly status updates. She's particularly interested in ROI metrics for marketing initiatives.",
+    "communicationPreferences": {
+      "preferredChannel": "email",
+      "frequency": "weekly",
+      "bestTimeToContact": "mornings"
+    },
+    "relationshipHealth": {
+      "score": 85,
+      "lastContact": "2025-03-12T14:30:00",
+      "contactFrequency": "high",
+      "responseTime": "prompt"
+    },
+    "recentActivity": [
+      {
+        "id": "activity-001",
+        "type": "email",
+        "description": "Sent campaign proposal",
+        "date": "2025-03-12T14:30:00",
+        "project": {
+          "id": "proj-004",
+          "title": "Marketing Campaign"
+        }
+      },
+      {
+        "id": "activity-002",
+        "type": "meeting",
+        "description": "Weekly marketing sync",
+        "date": "2025-03-08T10:00:00",
+        "project": {
+          "id": "proj-004",
+          "title": "Marketing Campaign"
+        }
+      },
+      {
+        "id": "activity-003",
+        "type": "document",
+        "description": "Shared content calendar",
+        "date": "2025-03-05T16:30:00",
+        "project": {
+          "id": "proj-003",
+          "title": "Content Strategy"
+        }
+      }
+    ],
+    "upcomingInteractions": [
+      {
+        "id": "meeting-002",
+        "type": "meeting",
+        "title": "Project Kickoff: Marketing Campaign",
+        "date": "2025-03-15T14:30:00",
+        "project": {
+          "id": "proj-004",
+          "title": "Marketing Campaign"
+        }
+      }
+    ]
+  },
+  {
+    "id": "stakeholder-002",
+    "name": "David Wilson",
+    "role": "CEO",
+    "company": "Client Co.",
+    "avatar": "/avatars/david.jpg",
+    "contact": {
+      "email": "david.wilson@clientco.com",
+      "phone": "+1 (555) 987-6543",
+      "linkedin": "linkedin.com/in/davidwilson"
+    },
+    "tags": ["external", "client", "executive", "decision-maker"],
+    "projects": [
+      {
+        "id": "proj-001",
+        "title": "Website Redesign",
+        "role": "Client Executive"
+      }
+    ],
+    "notes": "David is the primary decision-maker for the website redesign project. He's very busy, so communications should be concise and focused on high-level progress and business impact.",
+    "communicationPreferences": {
+      "preferredChannel": "in-person",
+      "frequency": "bi-weekly",
+      "bestTimeToContact": "afternoons"
+    },
+    "relationshipHealth": {
+      "score": 75,
+      "lastContact": "2025-03-11T10:00:00",
+      "contactFrequency": "medium",
+      "responseTime": "delayed"
+    },
+    "recentActivity": [
+      {
+        "id": "activity-004",
+        "type": "meeting",
+        "description": "Quarterly review meeting",
+        "date": "2025-03-11T10:00:00",
+        "project": {
+          "id": "proj-001",
+          "title": "Website Redesign"
+        }
+      },
+      {
+        "id": "activity-005",
+        "type": "email",
+        "description": "Sent project status update",
+        "date": "2025-03-01T09:15:00",
+        "project": {
+          "id": "proj-001",
+          "title": "Website Redesign"
+        }
+      }
+    ],
+    "upcomingInteractions": [
+      {
+        "id": "meeting-003",
+        "type": "meeting",
+        "title": "Client Presentation",
+        "date": "2025-03-16T11:00:00",
+        "project": {
+          "id": "proj-001",
+          "title": "Website Redesign"
+        }
+      }
+    ]
+  },
+  {
+    "id": "stakeholder-003",
+    "name": "Emily Davis",
+    "role": "Product Manager",
+    "company": "Acme Inc.",
+    "avatar": "/avatars/emily.jpg",
+    "contact": {
+      "email": "emily.davis@acmeinc.com",
+      "phone": "+1 (555) 234-5678",
+      "slack": "@emilyd"
+    },
+    "tags": ["internal", "product", "technical"],
+    "projects": [
+      {
+        "id": "proj-002",
+        "title": "Mobile App Development",
+        "role": "Project Manager"
+      },
+      {
+        "id": "proj-001",
+        "title": "Website Redesign",
+        "role": "Technical Advisor"
+      }
+    ],
+    "notes": "Emily is highly technical and detail-oriented. She prefers Slack for quick communications and structured documentation for project details.",
+    "communicationPreferences": {
+      "preferredChannel": "slack",
+      "frequency": "daily",
+      "bestTimeToContact": "afternoons"
+    },
+    "relationshipHealth": {
+      "score": 90,
+      "lastContact": "2025-03-10T16:45:00",
+      "contactFrequency": "high",
+      "responseTime": "immediate"
+    },
+    "recentActivity": [
+      {
+        "id": "activity-006",
+        "type": "document",
+        "description": "Shared product roadmap",
+        "date": "2025-03-10T16:45:00",
+        "project": {
+          "id": "proj-002",
+          "title": "Mobile App Development"
+        }
+      },
+      {
+        "id": "activity-007",
+        "type": "meeting",
+        "description": "Technical planning session",
+        "date": "2025-03-07T13:00:00",
+        "project": {
+          "id": "proj-002",
+          "title": "Mobile App Development"
+        }
+      },
+      {
+        "id": "activity-008",
+        "type": "slack",
+        "description": "Discussed API requirements",
+        "date": "2025-03-05T11:30:00",
+        "project": {
+          "id": "proj-002",
+          "title": "Mobile App Development"
+        }
+      }
+    ],
+    "upcomingInteractions": [
+      {
+        "id": "meeting-005",
+        "type": "meeting",
+        "title": "API Integration Planning",
+        "date": "2025-03-18T13:00:00",
+        "project": {
+          "id": "proj-002",
+          "title": "Mobile App Development"
+        }
+      },
+      {
+        "id": "meeting-003",
+        "type": "meeting",
+        "title": "Client Presentation",
+        "date": "2025-03-16T11:00:00",
+        "project": {
+          "id": "proj-001",
+          "title": "Website Redesign"
+        }
+      }
+    ]
+  },
+  {
+    "id": "stakeholder-004",
+    "name": "Michael Brown",
+    "role": "Creative Director",
+    "company": "Design Studio",
+    "avatar": "/avatars/michael.jpg",
+    "contact": {
+      "email": "michael.brown@designstudio.com",
+      "phone": "+1 (555) 345-6789",
+      "linkedin": "linkedin.com/in/michaelbrown"
+    },
+    "tags": ["external", "vendor", "creative"],
+    "projects": [
+      {
+        "id": "proj-001",
+        "title": "Website Redesign",
+        "role": "Design Lead"
+      },
+      {
+        "id": "proj-002",
+        "title": "Mobile App Development",
+        "role": "UX Consultant"
+      }
+    ],
+    "notes": "Michael leads the external design team. He's very creative and responds well to clear, visual communication. He prefers to discuss design feedback in real-time rather than through written comments.",
+    "communicationPreferences": {
+      "preferredChannel": "video-call",
+      "frequency": "weekly",
+      "bestTimeToContact": "mid-day"
+    },
+    "relationshipHealth": {
+      "score": 80,
+      "lastContact": "2025-03-09T11:30:00",
+      "contactFrequency": "medium",
+      "responseTime": "prompt"
+    },
+    "recentActivity": [
+      {
+        "id": "activity-009",
+        "type": "call",
+        "description": "Discussed design revisions",
+        "date": "2025-03-09T11:30:00",
+        "project": {
+          "id": "proj-001",
+          "title": "Website Redesign"
+        }
+      },
+      {
+        "id": "activity-010",
+        "type": "email",
+        "description": "Sent design files",
+        "date": "2025-03-06T15:45:00",
+        "project": {
+          "id": "proj-001",
+          "title": "Website Redesign"
+        }
+      }
+    ],
+    "upcomingInteractions": [
+      {
+        "id": "meeting-004",
+        "type": "meeting",
+        "title": "Design Review",
+        "date": "2025-03-17T15:00:00",
+        "project": {
+          "id": "proj-001",
+          "title": "Website Redesign"
+        }
+      }
+    ]
+  },
+  {
+    "id": "stakeholder-005",
+    "name": "Thomas Clark",
+    "role": "Creative Director",
+    "company": "Acme Inc.",
+    "avatar": "/avatars/thomas.jpg",
+    "contact": {
+      "email": "thomas.clark@acmeinc.com",
+      "phone": "+1 (555) 456-7890",
+      "slack": "@thomasc"
+    },
+    "tags": ["internal", "creative", "marketing"],
+    "projects": [
+      {
+        "id": "proj-004",
+        "title": "Marketing Campaign",
+        "role": "Creative Lead"
+      }
+    ],
+    "notes": "Thomas oversees all creative aspects of marketing campaigns. He's very detail-oriented when it comes to brand consistency and creative quality.",
+    "communicationPreferences": {
+      "preferredChannel": "in-person",
+      "frequency": "weekly",
+      "bestTimeToContact": "mornings"
+    },
+    "relationshipHealth": {
+      "score": 85,
+      "lastContact": "2025-03-08T11:15:00",
+      "contactFrequency": "medium",
+      "responseTime": "prompt"
+    },
+    "recentActivity": [
+      {
+        "id": "activity-011",
+        "type": "comment",
+        "description": "Provided feedback on presentation",
+        "date": "2025-03-08T11:15:00",
+        "project": {
+          "id": "proj-004",
+          "title": "Marketing Campaign"
+        }
+      },
+      {
+        "id": "activity-012",
+        "type": "meeting",
+        "description": "Creative brainstorming session",
+        "date": "2025-03-05T14:00:00",
+        "project": {
+          "id": "proj-004",
+          "title": "Marketing Campaign"
+        }
+      }
+    ],
+    "upcomingInteractions": [
+      {
+        "id": "meeting-002",
+        "type": "meeting",
+        "title": "Project Kickoff: Marketing Campaign",
+        "date": "2025-03-15T14:30:00",
+        "project": {
+          "id": "proj-004",
+          "title": "Marketing Campaign"
+        }
+      }
+    ]
+  }
+]
