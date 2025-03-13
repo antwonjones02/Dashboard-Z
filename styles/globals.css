@@ -4,13 +4,13 @@
 
 @layer base {
   body {
-    @apply bg-neutral-50 text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50;
+    @apply bg-neutral-50 text-neutral-900 dark:bg-[#041C2C] dark:text-neutral-50;
   }
 }
 
 @layer components {
   .card {
-    @apply bg-white dark:bg-neutral-800 rounded-card shadow-card hover:shadow-card-hover transition-shadow duration-300;
+    @apply bg-white dark:bg-[#041C2C] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300;
   }
   
   .btn {
@@ -18,23 +18,23 @@
   }
   
   .btn-primary {
-    @apply bg-primary-600 text-white hover:bg-primary-700;
+    @apply bg-[#003366] text-white hover:bg-[#041C2C];
   }
   
   .btn-secondary {
-    @apply bg-secondary-600 text-white hover:bg-secondary-700;
+    @apply bg-[#C01933] text-white hover:bg-[#991933];
   }
   
   .btn-outline {
-    @apply border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800;
+    @apply border border-neutral-300 dark:border-[#002852] hover:bg-neutral-100 dark:hover:bg-[#002852];
   }
   
   .input {
-    @apply px-3 py-2 border border-neutral-300 dark:border-neutral-700 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-800;
+    @apply px-3 py-2 border border-neutral-300 dark:border-[#002852] rounded-md focus:outline-none focus:ring-2 focus:ring-[#003366] dark:bg-[#041C2C];
   }
   
   .label {
-    @apply block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1;
+    @apply block text-sm font-medium text-neutral-700 dark:text-[#7D9BC1] mb-1;
   }
   
   .badge {
@@ -42,14 +42,14 @@
   }
   
   .badge-success {
-    @apply bg-success-100 text-success-800 dark:bg-success-900 dark:text-success-100;
+    @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100;
   }
   
   .badge-warning {
-    @apply bg-warning-100 text-warning-800 dark:bg-warning-900 dark:text-warning-100;
+    @apply bg-[#EAAA00] text-[#041C2C] dark:bg-[#EAAA00] dark:text-[#041C2C];
   }
   
   .badge-danger {
-    @apply bg-danger-100 text-danger-800 dark:bg-danger-900 dark:text-danger-100;
+    @apply bg-[#C01933] text-white dark:bg-[#C01933] dark:text-white;
   }
 }
