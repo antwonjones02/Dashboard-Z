@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Dialog } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Project } from './KanbanBoard';
+import { v4 as uuidv4 } from 'uuid';
 
 interface ProjectFormProps {
   isOpen: boolean;
@@ -12,7 +13,7 @@ interface ProjectFormProps {
 }
 
 const defaultProject: Project = {
-  id: 0,
+  id: uuidv4(),
   name: '',
   description: '',
   status: 'Planning',

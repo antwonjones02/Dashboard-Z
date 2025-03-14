@@ -4,7 +4,7 @@ import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 // Define project type
 export interface Project {
-  id: number;
+  id: string | number;
   name: string;
   description: string;
   status: string;
@@ -18,8 +18,9 @@ export interface Project {
 interface KanbanBoardProps {
   projects: Project[];
   onProjectUpdate: (updatedProject: Project) => void;
-  onProjectDelete: (projectId: number) => void;
-  onProjectAdd: (status: string) => void;
+  onProjectDelete: (projectId: string | number) => void;
+  onProjectAdd?: (status: string) => void;
+  onProjectEdit?: (project: Project) => void;
 }
 
 const KanbanBoard: React.FC<KanbanBoardProps> = ({
@@ -27,6 +28,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
   onProjectUpdate,
   onProjectDelete,
   onProjectAdd,
+  onProjectEdit,
 }) => {
   // Group projects by status
   const columns = {
@@ -48,8 +50,8 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
     }
 
     // Find the project that was dragged
-    const projectId = parseInt(draggableId.split('-')[1]);
-    const project = projects.find(p => p.id === projectId);
+    const projectId = draggableId.split('-')[1];
+    const project = projects.find(p => p.id.toString() === projectId);
 
     if (project) {
       // Update the project status based on the destination column
@@ -117,7 +119,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
                   </span>
                 </div>
                 <button
-                  onClick={() => onProjectAdd(status)}
+                  onClick={() => onProjectAdd && onProjectAdd(status)}
                   className="p-1 rounded-full text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white focus:outline-none"
                 >
                   <PlusIcon className="h-5 w-5" />
@@ -148,7 +150,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
                               <h3 className="text-sm font-medium text-neutral-800 dark:text-white">{project.name}</h3>
                               <div className="flex space-x-1">
                                 <button
-                                  onClick={() => onProjectUpdate({...project})}
+                                  onClick={() => onProjectEdit && onProjectEdit(project)}
                                   className="p-1 rounded-full text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 focus:outline-none"
                                 >
                                   <PencilIcon className="h-4 w-4" />
