@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ClipboardDocumentListIcon, 
   UsersIcon, 
@@ -11,8 +11,49 @@ import TaskSummary from './dashboard/TaskSummary';
 import UpcomingMeetings from './dashboard/UpcomingMeetings';
 import StakeholderActivity from './dashboard/StakeholderActivity';
 import Link from 'next/link';
+import { useAuth } from '../utils/AuthContext';
+import { getProjects } from '../services/dataService';
 
 const DashboardOverview: React.FC = () => {
+  const [counts, setCounts] = useState({
+    projects: 0,
+    tasks: 0,
+    stakeholders: 0,
+    meetings: 0
+  });
+  const { user } = useAuth();
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      if (!user) return;
+
+      try {
+        // Fetch projects count
+        const { data: projectsData, error: projectsError } = await getProjects(user.id);
+        if (!projectsError && projectsData) {
+          setCounts(prev => ({ ...prev, projects: projectsData.length }));
+        }
+
+        // For tasks, stakeholders, and meetings, we would normally fetch from the API
+        // Since we're using mock data in those pages, we'll count the items from the mock data
+        // In a real implementation, you would replace these with actual API calls
+        
+        // For tasks - count from the initialTasks array in tasks.tsx (6 tasks)
+        setCounts(prev => ({ ...prev, tasks: 6 }));
+        
+        // For stakeholders - count from the fetchStakeholders mock in stakeholders.tsx (3 stakeholders)
+        setCounts(prev => ({ ...prev, stakeholders: 3 }));
+        
+        // For meetings - count from the fetchMeetings mock in meetings.tsx (2 meetings)
+        setCounts(prev => ({ ...prev, meetings: 2 }));
+      } catch (error) {
+        console.error('Error fetching counts:', error);
+      }
+    };
+
+    fetchCounts();
+  }, [user]);
+
   return (
     <div className="space-y-6">
       <div>
@@ -33,7 +74,7 @@ const DashboardOverview: React.FC = () => {
               <dl>
                 <dt className="text-sm font-medium text-neutral-600 dark:text-neutral-400 truncate">Active Projects</dt>
                 <dd>
-                  <div className="text-lg font-medium text-neutral-800 dark:text-neutral-100">12</div>
+                  <div className="text-lg font-medium text-neutral-800 dark:text-neutral-100">{counts.projects}</div>
                 </dd>
               </dl>
             </div>
@@ -49,7 +90,7 @@ const DashboardOverview: React.FC = () => {
               <dl>
                 <dt className="text-sm font-medium text-neutral-600 dark:text-neutral-400 truncate">Pending Tasks</dt>
                 <dd>
-                  <div className="text-lg font-medium text-neutral-800 dark:text-neutral-100">24</div>
+                  <div className="text-lg font-medium text-neutral-800 dark:text-neutral-100">{counts.tasks}</div>
                 </dd>
               </dl>
             </div>
@@ -65,7 +106,7 @@ const DashboardOverview: React.FC = () => {
               <dl>
                 <dt className="text-sm font-medium text-neutral-600 dark:text-neutral-400 truncate">Key Stakeholders</dt>
                 <dd>
-                  <div className="text-lg font-medium text-neutral-800 dark:text-neutral-100">18</div>
+                  <div className="text-lg font-medium text-neutral-800 dark:text-neutral-100">{counts.stakeholders}</div>
                 </dd>
               </dl>
             </div>
@@ -81,7 +122,7 @@ const DashboardOverview: React.FC = () => {
               <dl>
                 <dt className="text-sm font-medium text-neutral-600 dark:text-neutral-400 truncate">Upcoming Meetings</dt>
                 <dd>
-                  <div className="text-lg font-medium text-neutral-800 dark:text-neutral-100">5</div>
+                  <div className="text-lg font-medium text-neutral-800 dark:text-neutral-100">{counts.meetings}</div>
                 </dd>
               </dl>
             </div>
