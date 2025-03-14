@@ -1,0 +1,8 @@
+# Ignore specific files that are causing issues
+pages/login.tsx
+pages/meetings.tsx
+
+# Ignore build artifacts
+.next/
+out/
+node_modules/ 
