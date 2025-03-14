@@ -8,6 +8,8 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import { useTheme } from 'next-themes';
+import { useAuth } from '../utils/AuthContext';
+import Link from 'next/link';
 
 interface NavbarProps {
   setSidebarOpen: (open: boolean) => void;
@@ -15,9 +17,20 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ setSidebarOpen }) => {
   const { theme, setTheme } = useTheme();
+  const { user, signOut } = useAuth();
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
+  const handleSignOut = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      await signOut();
+      // The redirect is handled in the AuthContext
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
   return (
@@ -32,7 +45,7 @@ const Navbar: React.FC<NavbarProps> = ({ setSidebarOpen }) => {
       </button>
       <div className="flex-1 px-4 flex justify-between">
         <div className="flex-1 flex items-center">
-          <h1 className="text-xl font-bold text-[#003366] dark:text-white md:hidden">Workflow Nexus</h1>
+          <h1 className="text-xl font-bold text-[#003366] dark:text-white md:hidden">Dashboard-Z</h1>
         </div>
         <div className="ml-4 flex items-center md:ml-6 space-x-4">
           {/* Theme toggle */}
@@ -78,38 +91,38 @@ const Navbar: React.FC<NavbarProps> = ({ setSidebarOpen }) => {
               <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-[#041C2C] ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <Menu.Item>
                   {({ active }) => (
-                    <a
-                      href="#"
+                    <Link
+                      href="/settings"
                       className={`${
                         active ? 'bg-gray-100 dark:bg-[#002852]' : ''
                       } block px-4 py-2 text-sm text-gray-700 dark:text-[#7D9BC1]`}
                     >
                       Your Profile
-                    </a>
+                    </Link>
                   )}
                 </Menu.Item>
                 <Menu.Item>
                   {({ active }) => (
-                    <a
-                      href="#"
+                    <Link
+                      href="/settings"
                       className={`${
                         active ? 'bg-gray-100 dark:bg-[#002852]' : ''
                       } block px-4 py-2 text-sm text-gray-700 dark:text-[#7D9BC1]`}
                     >
                       Settings
-                    </a>
+                    </Link>
                   )}
                 </Menu.Item>
                 <Menu.Item>
                   {({ active }) => (
-                    <a
-                      href="#"
+                    <button
+                      onClick={handleSignOut}
                       className={`${
                         active ? 'bg-gray-100 dark:bg-[#002852]' : ''
-                      } block px-4 py-2 text-sm text-gray-700 dark:text-[#7D9BC1]`}
+                      } block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-[#7D9BC1]`}
                     >
                       Sign out
-                    </a>
+                    </button>
                   )}
                 </Menu.Item>
               </Menu.Items>
