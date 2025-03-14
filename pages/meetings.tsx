@@ -4,6 +4,7 @@ import { MagnifyingGlassIcon, FunnelIcon, PlusIcon, ChevronDownIcon } from '@her
 import SEO from '../components/SEO';
 import CSVActions from '../components/CSVActions';
 import { csvTemplates } from '../utils/csvUtils';
+import Image from 'next/image';
 
 // Define the Meeting type
 interface Meeting {
@@ -418,13 +419,19 @@ const Meetings = () => {
                       <p className="text-sm font-medium text-gray-900 dark:text-white">Attendees:</p>
                       <div className="mt-1 flex -space-x-1 overflow-hidden">
                         {meeting.attendees.map((attendee) => (
-                          <img
+                          <div
                             key={attendee.id}
-                            className="inline-block h-6 w-6 rounded-full ring-2 ring-white dark:ring-gray-800"
-                            src={attendee.avatar}
-                            alt={attendee.name}
+                            className="inline-block h-6 w-6 rounded-full ring-2 ring-white dark:ring-gray-800 relative"
                             title={attendee.name}
-                          />
+                          >
+                            <Image
+                              className="rounded-full"
+                              src={attendee.avatar}
+                              alt={attendee.name}
+                              fill
+                              sizes="24px"
+                            />
+                          </div>
                         ))}
                         {meeting.attendees.length > 0 && (
                           <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
