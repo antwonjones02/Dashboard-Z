@@ -9,6 +9,8 @@
   NEXT_PUBLIC_API_URL = "/api"
   NEXT_PUBLIC_ENABLE_DARK_MODE = "true"
   NEXT_DISABLE_ESLINT = "1"
+  NEXT_PUBLIC_SUPABASE_URL = "https://sibbmosbypqavsqmmnmv.supabase.co"
+  NEXT_PUBLIC_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpYmJtb3NieXBxYXZzcW1tbm12Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE5MjQzOTIsImV4cCI6MjA1NzUwMDM5Mn0.1XaRq173jwmXBHNHj8rrpme0TL8HVQcJJonG1suWEFg"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
