@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../utils/AuthContext';
-import { supabase } from '../utils/supabase';
+import { getProfile, updateProfile, createProfile } from '../services/dataService';
 
 interface UserProfileData {
   id: string;
@@ -28,11 +28,7 @@ const UserProfile = () => {
     try {
       setLoading(true);
       
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
+      const { data, error } = await getProfile(user.id);
       
       if (error) {
         console.error('Error fetching profile:', error);
@@ -72,33 +68,26 @@ const UserProfile = () => {
       // Check if profile exists
       if (profile) {
         // Update existing profile
-        const { error } = await supabase
-          .from('profiles')
-          .update({
-            full_name: formData.full_name,
-            job_title: formData.job_title,
-            department: formData.department,
-            updated_at: new Date(),
-          })
-          .eq('id', user?.id);
+        const { error } = await updateProfile(user?.id as string, {
+          full_name: formData.full_name,
+          job_title: formData.job_title,
+          department: formData.department,
+          updated_at: new Date(),
+        });
 
         if (error) {
           throw error;
         }
       } else {
         // Create new profile
-        const { error } = await supabase
-          .from('profiles')
-          .insert([
-            {
-              id: user?.id,
-              full_name: formData.full_name,
-              job_title: formData.job_title,
-              department: formData.department,
-              created_at: new Date(),
-              updated_at: new Date(),
-            },
-          ]);
+        const { error } = await createProfile({
+          id: user?.id,
+          full_name: formData.full_name,
+          job_title: formData.job_title,
+          department: formData.department,
+          created_at: new Date(),
+          updated_at: new Date(),
+        });
 
         if (error) {
           throw error;

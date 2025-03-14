@@ -21,10 +21,16 @@ A comprehensive dashboard application for managing projects, tasks, stakeholders
 - **Charts**: Chart.js with React-Chartjs-2
 - **UI Components**: Headless UI
 - **Drag and Drop**: React Beautiful DnD
+- **Backend**: Supabase (PostgreSQL database and authentication)
 
-## Getting Started
+## Setup
 
-### Development Environment
+### Prerequisites
+
+- Node.js 16+ and npm
+- Supabase account (for database and authentication)
+
+### Installation
 
 1. Clone the repository:
    ```bash
@@ -37,117 +43,76 @@ A comprehensive dashboard application for managing projects, tasks, stakeholders
    npm install
    ```
 
-3. Create a `.env.local` file based on `.env.local.example`:
+3. Set up environment variables:
+   Create a `.env.local` file in the root directory with the following variables:
    ```bash
-   cp .env.local.example .env.local
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
    ```
 
-4. Start the development server:
+4. Set up the database:
+   - Create a new Supabase project
+   - Run the SQL migrations in the `migrations` folder to create the necessary tables and policies
+   - First run `migrations/create_tables.sql` in the Supabase SQL editor
+   - Then run `migrations/create_projects_table.sql` to create the projects table
+   - For more detailed instructions, see the [Database Setup Guide](DATABASE_SETUP.md)
+
+5. Start the development server:
    ```bash
    npm run dev
    ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+6. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Production Deployment
+## Database Schema
 
-### Prerequisites
+The application uses the following tables:
 
-Before deploying to production, ensure you have:
+- `profiles`: User profile information
+- `user_settings`: User preferences for theme, notifications, etc.
+- `projects`: Project information with status, priority, etc.
+- `tasks`: Task information with status, priority, assignee, etc.
+- `stakeholders`: Stakeholder information with contact details, influence level, etc.
+- `meetings`: Meeting information with date, attendees, agenda, etc.
 
-1. Updated all environment variables in `.env.local` for production
-2. Tested the application thoroughly
-3. Optimized images and assets
-4. Reviewed security settings
+### Common Database Issues
 
-### Option 1: Standard Node.js Deployment
+If you see the error "relation 'public.projects' does not exist" when accessing the Project Command Center, it means the projects table hasn't been created in your Supabase database. Follow these steps to fix it:
 
-1. Install production dependencies:
-   ```bash
-   npm ci
-   ```
+1. Go to your Supabase project dashboard
+2. Navigate to the SQL Editor
+3. Create a new query
+4. Copy and paste the contents of `migrations/create_projects_table.sql`
+5. Run the query
+6. Refresh your application
 
-2. Build the application:
-   ```bash
-   npm run build
-   ```
+## Authentication
 
-3. Start the production server:
-   ```bash
-   npm run start
-   ```
+The application uses Supabase Authentication for user management. Users can:
 
-4. For a proper production setup, consider using a process manager like PM2:
-   ```bash
-   # Install PM2
-   npm install -g pm2
-   
-   # Start the application with PM2
-   pm2 start npm --name "dashboard-z" -- start
-   
-   # Set up PM2 to start on system boot
-   pm2 startup
-   pm2 save
-   ```
+- Sign up with email and password
+- Sign in with email and password
+- Reset password
+- Update profile information
 
-### Option 2: Using the Deployment Script
+## Deployment
 
-Our enhanced deployment script provides an interactive way to deploy:
+The application can be deployed to Netlify or Vercel:
 
-1. Make the deployment script executable:
-   ```bash
-   chmod +x deploy.sh
-   ```
+### Netlify
 
-2. Run the deployment script and follow the prompts:
-   ```bash
-   ./deploy.sh
-   ```
+1. Push your code to GitHub
+2. Connect your GitHub repository to Netlify
+3. Set the build command to `npm run build`
+4. Set the publish directory to `.next`
+5. Add the environment variables in the Netlify dashboard
 
-### Option 3: Docker Deployment
+### Vercel
 
-For containerized deployment:
-
-1. Ensure Docker and Docker Compose are installed on your server
-2. Update environment variables in `.env.local` or pass them directly to docker-compose
-3. Build and run using Docker Compose:
-   ```bash
-   docker-compose up -d
-   ```
-
-4. To stop the containers:
-   ```bash
-   docker-compose down
-   ```
-
-5. To view logs:
-   ```bash
-   docker-compose logs -f
-   ```
-
-### Option 4: Cloud Deployment
-
-Dashboard-Z can be deployed to various cloud platforms:
-
-#### Vercel (Recommended for Next.js)
-
-1. Connect your GitHub repository to Vercel
-2. Configure environment variables in the Vercel dashboard
-3. Deploy with a single click
-
-#### Netlify
-
-1. Connect your GitHub repository to Netlify
-2. Configure build settings: 
-   - Build command: `npm run build`
-   - Publish directory: `.next`
-3. Set environment variables in the Netlify dashboard
-
-#### AWS Amplify
-
-1. Connect your repository to AWS Amplify
-2. Configure build settings
-3. Set environment variables
+1. Push your code to GitHub
+2. Import your GitHub repository in Vercel
+3. Add the environment variables in the Vercel dashboard
+4. Deploy
 
 ## Environment Variables
 
@@ -157,6 +122,8 @@ The application uses the following environment variables:
 - `NEXT_PUBLIC_API_URL`: The URL of the API (if applicable)
 - `NEXT_PUBLIC_ENABLE_CSV_IMPORT`: Enable/disable CSV import functionality
 - `NEXT_PUBLIC_ENABLE_DARK_MODE`: Enable/disable dark mode
+- `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase project URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anonymous key
 
 ## Maintenance and Updates
 
@@ -184,6 +151,7 @@ To keep your production deployment up-to-date:
 - **Build Errors**: Check for missing dependencies or environment variables
 - **Runtime Errors**: Check server logs and browser console
 - **Performance Issues**: Consider optimizing images, using code splitting, and enabling caching
+- **Database Errors**: See the [Database Setup Guide](DATABASE_SETUP.md) for common database issues and solutions
 
 ## Contributing
 

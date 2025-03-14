@@ -150,15 +150,15 @@ const StakeholderCard: React.FC<StakeholderCardProps> = ({
         <div className="mt-4 grid grid-cols-2 gap-2">
           <div className="col-span-2 sm:col-span-1">
             <div className="flex items-center text-sm text-neutral-600 dark:text-neutral-400">
-              <EnvelopeIcon className="mr-2 h-4 w-4" />
-              <a href={`mailto:${stakeholder.contact.email}`} className="hover:text-[#003366] dark:hover:text-[#7D9BC1]">
+              <EnvelopeIcon className="flex-shrink-0 mr-2 h-4 w-4" />
+              <a href={`mailto:${stakeholder.contact.email}`} className="hover:text-[#003366] dark:hover:text-[#7D9BC1] truncate" title={stakeholder.contact.email}>
                 {stakeholder.contact.email}
               </a>
             </div>
           </div>
           <div className="col-span-2 sm:col-span-1">
             <div className="flex items-center text-sm text-neutral-600 dark:text-neutral-400">
-              <PhoneIcon className="mr-2 h-4 w-4" />
+              <PhoneIcon className="flex-shrink-0 mr-2 h-4 w-4" />
               <a href={`tel:${stakeholder.contact.phone}`} className="hover:text-[#003366] dark:hover:text-[#7D9BC1]">
                 {stakeholder.contact.phone}
               </a>
@@ -167,8 +167,8 @@ const StakeholderCard: React.FC<StakeholderCardProps> = ({
           {stakeholder.contact.linkedin && (
             <div className="col-span-2 sm:col-span-1">
               <div className="flex items-center text-sm text-neutral-600 dark:text-neutral-400">
-                <LinkIcon className="mr-2 h-4 w-4" />
-                <a href={`https://${stakeholder.contact.linkedin}`} target="_blank" rel="noopener noreferrer" className="hover:text-[#003366] dark:hover:text-[#7D9BC1]">
+                <LinkIcon className="flex-shrink-0 mr-2 h-4 w-4" />
+                <a href={`https://${stakeholder.contact.linkedin}`} target="_blank" rel="noopener noreferrer" className="hover:text-[#003366] dark:hover:text-[#7D9BC1] truncate" title={stakeholder.contact.linkedin}>
                   LinkedIn
                 </a>
               </div>
@@ -177,8 +177,8 @@ const StakeholderCard: React.FC<StakeholderCardProps> = ({
           {stakeholder.contact.slack && (
             <div className="col-span-2 sm:col-span-1">
               <div className="flex items-center text-sm text-neutral-600 dark:text-neutral-400">
-                <ChatBubbleLeftIcon className="mr-2 h-4 w-4" />
-                <span>{stakeholder.contact.slack}</span>
+                <ChatBubbleLeftIcon className="flex-shrink-0 mr-2 h-4 w-4" />
+                <span className="truncate" title={stakeholder.contact.slack}>{stakeholder.contact.slack}</span>
               </div>
             </div>
           )}

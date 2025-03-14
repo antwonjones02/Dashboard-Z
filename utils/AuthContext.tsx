@@ -43,15 +43,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Handle user sign out
   const handleSignOut = async () => {
     try {
+      setLoading(true);
       const { error } = await signOut();
       if (error) {
         console.error('Error signing out:', error);
       } else {
         setUser(null);
-        router.push('/login');
+        // Force a hard redirect to ensure complete session cleanup
+        window.location.href = '/login';
       }
     } catch (error) {
       console.error('Error in handleSignOut:', error);
+    } finally {
+      setLoading(false);
     }
   };
 

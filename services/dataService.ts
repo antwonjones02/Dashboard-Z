@@ -191,4 +191,61 @@ export const deleteMeeting = async (meetingId: string) => {
     .eq('id', meetingId);
   
   return { data, error };
+};
+
+// Profile-related operations
+export const getProfile = async (userId: string) => {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
+    .single();
+  
+  return { data, error };
+};
+
+export const createProfile = async (profileData: any) => {
+  const { data, error } = await supabase
+    .from('profiles')
+    .insert([profileData]);
+  
+  return { data, error };
+};
+
+export const updateProfile = async (userId: string, profileData: any) => {
+  const { data, error } = await supabase
+    .from('profiles')
+    .update(profileData)
+    .eq('id', userId);
+  
+  return { data, error };
+};
+
+// User settings-related operations
+export const updateUserSettings = async (userId: string, settingsData: any) => {
+  const { data, error } = await supabase
+    .from('user_settings')
+    .update(settingsData)
+    .eq('user_id', userId);
+  
+  if (error && error.code === 'PGRST116') {
+    // If record doesn't exist, create it
+    const { data: newData, error: insertError } = await supabase
+      .from('user_settings')
+      .insert([{ user_id: userId, ...settingsData }]);
+    
+    return { data: newData, error: insertError };
+  }
+  
+  return { data, error };
+};
+
+export const getUserSettings = async (userId: string) => {
+  const { data, error } = await supabase
+    .from('user_settings')
+    .select('*')
+    .eq('user_id', userId)
+    .single();
+  
+  return { data, error };
 }; 

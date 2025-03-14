@@ -5,6 +5,9 @@ import ProjectForm from '../components/projects/ProjectForm';
 import { useAuth } from '../utils/AuthContext';
 import { getProjects, createProject, updateProject, deleteProject } from '../services/dataService';
 import { v4 as uuidv4 } from 'uuid';
+import Layout from '@/components/Layout';
+import Head from 'next/head';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 const ProjectsPage: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -214,53 +217,66 @@ const ProjectsPage: React.FC = () => {
   );
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Projects</h1>
-        <div className="flex space-x-2">
-          <button
-            onClick={handleImportCSV}
-            className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Import CSV
-          </button>
-          <button
-            onClick={handleAddProject}
-            className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            <PlusIcon className="-ml-0.5 mr-2 h-4 w-4" />
-            Add Project
-          </button>
-        </div>
-      </div>
+    <ProtectedRoute>
+      <Head>
+        <title>Dashboard-Z | Project Command Center</title>
+        <meta name="description" content="Manage and track your projects with Dashboard-Z" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Layout>
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Projects</h1>
+            <div className="flex space-x-2">
+              <button
+                onClick={handleImportCSV}
+                className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Import CSV
+              </button>
+              <button
+                onClick={handleAddProject}
+                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                <PlusIcon className="-ml-0.5 mr-2 h-4 w-4" />
+                Add Project
+              </button>
+            </div>
+          </div>
 
-      {isLoading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-        </div>
-      ) : error ? (
-        <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-md">
-          <p className="text-red-800 dark:text-red-200">{error}</p>
-        </div>
-      ) : projects.length === 0 ? (
-        renderEmptyState()
-      ) : (
-        <KanbanBoard
-          projects={projects}
-          onProjectUpdate={handleProjectUpdate}
-          onProjectDelete={handleProjectDelete}
-          onProjectEdit={handleEditProject}
-        />
-      )}
+          {isLoading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+          ) : error ? (
+            <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-md">
+              <p className="text-red-800 dark:text-red-200">{error}</p>
+            </div>
+          ) : projects.length === 0 ? (
+            renderEmptyState()
+          ) : (
+            <KanbanBoard
+              projects={projects}
+              onProjectUpdate={handleProjectUpdate}
+              onProjectDelete={handleProjectDelete}
+              onProjectAdd={handleAddProject}
+              onProjectEdit={handleEditProject}
+            />
+          )}
 
-      <ProjectForm
-        isOpen={isFormOpen}
-        onClose={() => setIsFormOpen(false)}
-        onSave={handleProjectSave}
-        project={currentProject}
-        isEdit={!!currentProject}
-      />
-    </div>
+          {isFormOpen && (
+            <ProjectForm
+              isOpen={isFormOpen}
+              onClose={() => setIsFormOpen(false)}
+              onSave={handleProjectSave}
+              project={currentProject}
+              isEdit={!!currentProject}
+            />
+          )}
+        </div>
+      </Layout>
+    </ProtectedRoute>
   );
 };
 

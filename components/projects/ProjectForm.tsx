@@ -13,7 +13,7 @@ interface ProjectFormProps {
 }
 
 const defaultProject: Project = {
-  id: uuidv4(),
+  id: '',
   name: '',
   description: '',
   status: 'Planning',
@@ -28,16 +28,30 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
   isOpen,
   onClose,
   onSave,
-  project = defaultProject,
+  project,
   isEdit = false,
 }) => {
-  const [formData, setFormData] = useState<Project>(project);
+  const [formData, setFormData] = useState<Project>(() => {
+    if (project) {
+      return project;
+    } else {
+      return {
+        ...defaultProject,
+        id: uuidv4()
+      };
+    }
+  });
 
   useEffect(() => {
     if (project) {
       setFormData(project);
+    } else {
+      setFormData({
+        ...defaultProject,
+        id: uuidv4()
+      });
     }
-  }, [project]);
+  }, [project, isOpen]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;

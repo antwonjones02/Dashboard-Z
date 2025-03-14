@@ -1,20 +1,134 @@
 import Head from 'next/head';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import UserProfile from '@/components/UserProfile';
 import { SunIcon, MoonIcon, UserCircleIcon, BellIcon, KeyIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '../utils/AuthContext';
 import { useTheme } from 'next-themes';
+import { getUserSettings, updateUserSettings } from '../services/dataService';
+
+interface UserSettings {
+  theme?: string;
+  email_notifications?: boolean;
+  push_notifications?: boolean;
+  reminder_notifications?: boolean;
+  font_size?: number;
+  accent_color?: string;
+}
 
 export default function Settings() {
   const { theme, setTheme } = useTheme();
+  const { user } = useAuth();
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [pushNotifications, setPushNotifications] = useState(true);
   const [reminderNotifications, setReminderNotifications] = useState(true);
   const [activeSection, setActiveSection] = useState('profile');
+  const [fontSize, setFontSize] = useState(3);
+  const [accentColor, setAccentColor] = useState('blue');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
-  const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+  // Fetch user settings
+  useEffect(() => {
+    const fetchUserSettings = async () => {
+      if (!user) return;
+      
+      try {
+        setLoading(true);
+        const { data, error } = await getUserSettings(user.id);
+        
+        if (error) {
+          console.error('Error fetching user settings:', error);
+        } else if (data) {
+          // Apply settings from database
+          if (data.theme) setTheme(data.theme);
+          if (data.email_notifications !== undefined) setEmailNotifications(data.email_notifications);
+          if (data.push_notifications !== undefined) setPushNotifications(data.push_notifications);
+          if (data.reminder_notifications !== undefined) setReminderNotifications(data.reminder_notifications);
+          if (data.font_size) setFontSize(data.font_size);
+          if (data.accent_color) setAccentColor(data.accent_color);
+        }
+      } catch (error) {
+        console.error('Error in fetchUserSettings:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchUserSettings();
+  }, [user, setTheme]);
+
+  const toggleTheme = async () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    
+    if (user) {
+      try {
+        await updateUserSettings(user.id, { theme: newTheme });
+      } catch (error) {
+        console.error('Error saving theme preference:', error);
+      }
+    }
+  };
+
+  const saveNotificationSettings = async () => {
+    if (!user) return;
+    
+    setLoading(true);
+    setMessage(null);
+    
+    try {
+      const { error } = await updateUserSettings(user.id, {
+        email_notifications: emailNotifications,
+        push_notifications: pushNotifications,
+        reminder_notifications: reminderNotifications,
+      });
+      
+      if (error) {
+        throw error;
+      }
+      
+      setMessage({ text: 'Notification settings saved successfully!', type: 'success' });
+    } catch (error) {
+      console.error('Error saving notification settings:', error);
+      setMessage({ text: 'Error saving settings. Please try again.', type: 'error' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const saveAppearanceSettings = async () => {
+    if (!user) return;
+    
+    setLoading(true);
+    setMessage(null);
+    
+    try {
+      const { error } = await updateUserSettings(user.id, {
+        theme,
+        font_size: fontSize,
+        accent_color: accentColor,
+      });
+      
+      if (error) {
+        throw error;
+      }
+      
+      setMessage({ text: 'Appearance settings saved successfully!', type: 'success' });
+    } catch (error) {
+      console.error('Error saving appearance settings:', error);
+      setMessage({ text: 'Error saving settings. Please try again.', type: 'error' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAccentColorChange = (color: string) => {
+    setAccentColor(color);
+  };
+
+  const handleFontSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFontSize(parseInt(e.target.value));
   };
 
   return (
@@ -125,6 +239,11 @@ export default function Settings() {
                     </p>
                   </div>
                   <div className="px-4 py-5 sm:p-6">
+                    {message && activeSection === 'appearance' && (
+                      <div className={`mb-4 p-3 rounded ${message.type === 'success' ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'}`}>
+                        {message.text}
+                      </div>
+                    )}
                     <div className="space-y-6">
                       {/* Theme toggle */}
                       <div className="flex items-center justify-between">
@@ -162,11 +281,26 @@ export default function Settings() {
                           Choose your preferred accent color
                         </p>
                         <div className="flex space-x-3">
-                          <button className="h-8 w-8 rounded-full bg-blue-500 ring-2 ring-offset-2 ring-blue-500 focus:outline-none"></button>
-                          <button className="h-8 w-8 rounded-full bg-purple-500 ring-offset-2 focus:outline-none"></button>
-                          <button className="h-8 w-8 rounded-full bg-green-500 ring-offset-2 focus:outline-none"></button>
-                          <button className="h-8 w-8 rounded-full bg-red-500 ring-offset-2 focus:outline-none"></button>
-                          <button className="h-8 w-8 rounded-full bg-yellow-500 ring-offset-2 focus:outline-none"></button>
+                          <button 
+                            className={`h-8 w-8 rounded-full bg-blue-500 focus:outline-none ${accentColor === 'blue' ? 'ring-2 ring-offset-2 ring-blue-500' : ''}`}
+                            onClick={() => handleAccentColorChange('blue')}
+                          ></button>
+                          <button 
+                            className={`h-8 w-8 rounded-full bg-purple-500 focus:outline-none ${accentColor === 'purple' ? 'ring-2 ring-offset-2 ring-purple-500' : ''}`}
+                            onClick={() => handleAccentColorChange('purple')}
+                          ></button>
+                          <button 
+                            className={`h-8 w-8 rounded-full bg-green-500 focus:outline-none ${accentColor === 'green' ? 'ring-2 ring-offset-2 ring-green-500' : ''}`}
+                            onClick={() => handleAccentColorChange('green')}
+                          ></button>
+                          <button 
+                            className={`h-8 w-8 rounded-full bg-red-500 focus:outline-none ${accentColor === 'red' ? 'ring-2 ring-offset-2 ring-red-500' : ''}`}
+                            onClick={() => handleAccentColorChange('red')}
+                          ></button>
+                          <button 
+                            className={`h-8 w-8 rounded-full bg-yellow-500 focus:outline-none ${accentColor === 'yellow' ? 'ring-2 ring-offset-2 ring-yellow-500' : ''}`}
+                            onClick={() => handleAccentColorChange('yellow')}
+                          ></button>
                         </div>
                       </div>
 
@@ -182,11 +316,23 @@ export default function Settings() {
                             type="range"
                             min="1"
                             max="5"
-                            defaultValue="3"
+                            value={fontSize}
+                            onChange={handleFontSizeChange}
                             className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer dark:bg-neutral-700"
                           />
                           <span className="text-base text-neutral-500 dark:text-neutral-400">A</span>
                         </div>
+                      </div>
+                      
+                      <div className="pt-5">
+                        <button
+                          type="button"
+                          onClick={saveAppearanceSettings}
+                          disabled={loading}
+                          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+                        >
+                          {loading ? 'Saving...' : 'Save Appearance Settings'}
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -203,6 +349,11 @@ export default function Settings() {
                     </p>
                   </div>
                   <div className="px-4 py-5 sm:p-6">
+                    {message && activeSection === 'notifications' && (
+                      <div className={`mb-4 p-3 rounded ${message.type === 'success' ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'}`}>
+                        {message.text}
+                      </div>
+                    )}
                     <div className="space-y-4">
                       {/* Email notifications */}
                       <div className="flex items-center justify-between">
@@ -259,9 +410,9 @@ export default function Settings() {
                       {/* Reminder notifications */}
                       <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="text-sm font-medium text-neutral-900 dark:text-neutral-100">Meeting Reminders</h3>
+                          <h3 className="text-sm font-medium text-neutral-900 dark:text-neutral-100">Reminder Notifications</h3>
                           <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                            Get reminded about upcoming meetings
+                            Receive reminders for upcoming deadlines
                           </p>
                         </div>
                         <div>
@@ -280,6 +431,17 @@ export default function Settings() {
                             />
                           </button>
                         </div>
+                      </div>
+                      
+                      <div className="pt-5">
+                        <button
+                          type="button"
+                          onClick={saveNotificationSettings}
+                          disabled={loading}
+                          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+                        >
+                          {loading ? 'Saving...' : 'Save Notification Settings'}
+                        </button>
                       </div>
                     </div>
                   </div>
