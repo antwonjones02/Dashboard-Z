@@ -5,9 +5,9 @@ A comprehensive dashboard application for managing projects, tasks, stakeholders
 ## Features
 
 - **Dashboard Overview**: Get a quick snapshot of your workflow
-- **Project Command Center**: Manage all your projects in one place
-- **Task Flow Manager**: Organize and track tasks across projects
-- **Stakeholder Nexus**: Manage relationships with key stakeholders
+- **Project Command Center**: Manage all your projects in one place with Kanban board functionality
+- **Task Flow Manager**: Organize and track tasks across projects with priority management
+- **Stakeholder Nexus**: Manage relationships with key stakeholders and track interactions
 - **Meeting Intelligence**: Schedule and track meetings
 - **Settings**: Customize your experience
 - **CSV Import/Export**: Import and export data using CSV files
@@ -125,29 +125,29 @@ For containerized deployment:
    docker-compose logs -f
    ```
 
-### Option 4: Netlify Deployment (Recommended)
+### Option 4: Cloud Deployment
 
-For easy cloud deployment with continuous integration:
+Dashboard-Z can be deployed to various cloud platforms:
 
-1. Ensure your repository includes the `netlify.toml` file (already created)
+#### Vercel (Recommended for Next.js)
 
-2. Connect your GitHub repository to Netlify:
-   - Sign up/login to [Netlify](https://netlify.com)
-   - Click "New site from Git" and select your GitHub repository
-   - Netlify will automatically detect the build settings from `netlify.toml`
+1. Connect your GitHub repository to Vercel
+2. Configure environment variables in the Vercel dashboard
+3. Deploy with a single click
 
-3. Configure environment variables in the Netlify dashboard:
-   - Go to Site settings > Environment variables
-   - Add all variables from your `.env.local` file
+#### Netlify
 
-4. For detailed instructions, see the [NETLIFY_DEPLOYMENT.md](NETLIFY_DEPLOYMENT.md) guide
+1. Connect your GitHub repository to Netlify
+2. Configure build settings: 
+   - Build command: `npm run build`
+   - Publish directory: `.next`
+3. Set environment variables in the Netlify dashboard
 
-5. For local Netlify development and testing:
-   ```bash
-   npm install -g netlify-cli
-   netlify login
-   npm run netlify-dev
-   ```
+#### AWS Amplify
+
+1. Connect your repository to AWS Amplify
+2. Configure build settings
+3. Set environment variables
 
 ## Environment Variables
 
@@ -184,7 +184,6 @@ To keep your production deployment up-to-date:
 - **Build Errors**: Check for missing dependencies or environment variables
 - **Runtime Errors**: Check server logs and browser console
 - **Performance Issues**: Consider optimizing images, using code splitting, and enabling caching
-- **Deployment Issues**: See the specific deployment guide for your chosen method
 
 ## Contributing
 

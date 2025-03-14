@@ -1,15 +1,19 @@
-version: '3'
+version: '3.8'
 
 services:
   dashboard-z:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: dashboard-z
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_APP_URL=http://localhost:3000
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-https://api.example.com}
+      - NEXT_PUBLIC_ENABLE_CSV_IMPORT=${NEXT_PUBLIC_ENABLE_CSV_IMPORT:-true}
+      - NEXT_PUBLIC_ENABLE_DARK_MODE=${NEXT_PUBLIC_ENABLE_DARK_MODE:-true}
     restart: always
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000"]
@@ -17,3 +21,15 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
+    volumes:
+      - dashboard-data:/app/data
+    networks:
+      - dashboard-network
+
+networks:
+  dashboard-network:
+    driver: bridge
+
+volumes:
+  dashboard-data:
+    driver: local
